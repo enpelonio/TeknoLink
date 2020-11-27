@@ -1,0 +1,21 @@
+.image-background-student-posts{
+    margin: 0 auto;
+}
+.reporter-profile{
+    width:50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+.view-reports p{
+    font-size: 14px;
+}
+.report-data{
+    color: red;
+}
+.view-reports .col{
+    border: 1px solid #a0a0a0;
+}
+input:disabled,textarea:disabled{
+    background-color: white;
+}

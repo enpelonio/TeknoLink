@@ -1,0 +1,70 @@
+.upload-profile-pic-student-btn{
+    background: #FFD700;
+    color: #800000;
+    border: 0px;
+    outline: none;
+    border-radius: 10px;
+    font-weight: 600;
+    margin: 0 auto;
+}
+.upload-profile-pic-student-btn:hover,#updateBtn-view-student:hover{
+    background-color: #FFE55A;
+    outline: none;
+    color: #800000;
+}
+.form-input-view-student{
+    height: 2em;
+}
+.col-view-student{
+    margin-right: 0px;
+}
+#updateBtn-view-student{
+    width: 204px;
+    height: 37px;
+    background: #FFD700;
+    font-weight: 600;
+    border-radius: 10px;
+    color: #800000;
+    border: 0px;
+    margin-bottom: 3 rem;
+}
+.fa-view-student{
+    color: #800000;
+    font-size: .7em;
+}
+.edit-button-view-student{
+    background-color: rgb(5, 146, 5);
+}
+.edit-button-view-student:hover{
+    background-color: rgb(141, 230, 7);
+}
+#fromDate-skill,#toDate-skill,#fromDate-milestone,#toDate-milestone{
+    outline: none;
+    border: 0px;
+    width: 200px;
+    height: 35px;
+    margin-left: 5px;
+    margin-top: 2px;
+}
+#exportBtn-skill,#exportBtn-milestone{
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.1); 
+    box-sizing: border-box;
+    box-shadow: 0px 9px 20px -9px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    height: fit-content;
+    padding: 5px 0px;
+    width: 138px;
+}
+#skill-table_filter,#milestone-table_filter{
+    display: none;
+}
+#exportBtn-skill:hover,#exportBtn-milestone:hover{
+    box-shadow: 0 0 0 2pt #FFE55A;
+}
+.view-student-card .card-header{
+    border: 0px;
+}
+.form-input-view-student:disabled{
+    background-color: white;
+}

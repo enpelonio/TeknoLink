@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job/Companies</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://use.fontawesome.com/43bd965db5.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.css"/>
+    <link rel="stylesheet" href="viewStudent.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+    <script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+  integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+  crossorigin="anonymous"></script>
+    <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="communities.css">
+    <link rel="stylesheet" href="createCommunity.css">
+    <link rel="stylesheet" href="activities.css">
+    <link rel="stylesheet" href="viewStudent.css">
+    <link rel="stylesheet" href="job-companies.css">
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+</head>
+<body>
+    <!--Jobs Table-->
+    <div class="container container-communities">
+        <div class="row">
+            <div class="col-sm-12 col-md-3 p-0">
+                <p class="text-center pageTitle p-1">Jobs</p>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-sm-12 col-md-4 mr-5">
+                <button type="button" class="float-right" id="addBtn" data-toggle="modal" data-target="#add-skill-modal">Add Job</button>
+            </div>
+        </div>
+        <div class="row pl-5 pr-5 mt-2">
+            <div class="col-xs-12 col-md-3 col-sm-5">
+                <button type="button" id="exportBtn-skill" data-toggle="tooltip" title="Export as PDF File"><i class="fa fa-file-pdf-o icon-export mr-3"></i>Export</button>
+            </div>
+        </div>
+        <div class="row pl-5 pr-5 mt-2">
+            <div class="col-12 mt-3">
+                <span class="communities-text">Filter By Date Created</span>
+            </div>
+        </div>
+        <div class="row align-content-center pl-5 pr-5">
+            <div class="col-sm-3 col-md-3 col-sm-6 mt-3">
+                <div class="datepicker date input-group p-0 inputWrapper-communities">
+                    <input type="text" placeholder="From" id="fromDate-skill">
+                    <div class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar icon-communities"></i></span></div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-sm-6 mt-3">
+                <div class="datepicker date input-group p-0 inputWrapper-communities">
+                    <input type="text" placeholder="To" id="toDate-skill">
+                    <div class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar icon-communities"></i></span></div>
+                </div>
+            </div>
+            <div class="col-sm-0 col-md-2"></div>
+            <div class="col-md-4 col-sm-12 mt-3">
+                <div class="d-flex align-content-center inputWrapper-communities" id="searchWrapper" >
+                    <i class="fa fa-search fa-search-communities icon-communities mr-2 ml-2"></i>
+                    <input class="form-input-communities" type="text" id="searchTxb-skill" placeholder="Search">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3 pl-5 pr-5">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table w-100" id="skill-table">
+                        <thead>
+                            <tr>
+                                <th>Date Created</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>12-25-2020</td>
+                                <td>Systems Engineer</td>
+                                <td>dsfsgfskhadfkjskjsfdsjhdfshjfdsljajklsdjkadkflshuogwiyiqueryq7yreiuf</td>
+                                <td><span data-toggle="tooltip" title="Edit"><button type="button" class="column-button edit-button-view-student ml-1 mr-1 mt-1" id="" 
+                                    data-toggle="modal" data-target="#edit-skill-modal"><i class="fa fa-pencil button-icon-communities"></i></button></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Add Job Modal-->
+    <div class="modal fade" id="add-skill-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-content-communities">
+            <div class="modal-header">
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">Add a Job
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form class="row row-edit-community" id="job-form" method="POST">
+                        <div class="col-sm-12 col-md-6">
+                            <p class="labels">Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input type="text" class="form-input form-input-view-student">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Description</p>
+                            <div class="form-item inputWrapper">
+                                <textarea class="form-input name="community_description" rows="6"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Required Skills</p>
+                            <div class="form-item d-flex align-content-center inputWrapper ui-widget">
+                                <input class="form-input form-input-view-student add-skill-txb" value="">
+                                <button type="button" class="w-40 addSkillBtn" id="addBtn">Add Skill</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-item inputWrapper tag-container-job-companies tag-container-job-companies-skill d-flex">
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="pageBtn labels float-right" type="submit">Add</button>
+                        </div>
+                    </form>
+                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="background.png" alt="" id="image-content-modal">
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Edit Job Modal-->
+      <div class="modal fade" id="edit-skill-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-content-communities">
+            <div class="modal-header">
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">Edit Job
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form class="row row-edit-community" id="job-form" method="POST">
+                        <div class="col-sm-12 col-md-6">
+                            <p class="labels">Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input type="text" class="form-input form-input-view-student">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Description</p>
+                            <div class="form-item inputWrapper">
+                                <textarea class="form-input name="community_description" rows="6"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Required Skills</p>
+                            <div class="form-item d-flex align-content-center inputWrapper ui-widget">
+                                <input class="form-input form-input-view-student add-skill-txb" value="">
+                                <button type="button" class="w-40 addSkillBtn" id="addBtn">Add Skill</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-item inputWrapper tag-container-job-companies tag-container-job-companies-skill d-flex">
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="pageBtn labels float-right" type="submit">Update</button>
+                        </div>
+                    </form>
+                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="background.png" alt="" id="image-content-modal">
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!--Companies Table-->
+    <div class="container container-communities">
+        <div class="row">
+            <div class="col-sm-12 col-md-3 p-0">
+                <p class="text-center pageTitle p-1">Companies</p>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-sm-12 col-md-4 mr-5">
+                <button type="button" class="float-right" id="addBtn" data-toggle="modal" data-target="#add-milestone-modal">Add Company</button>
+            </div>
+        </div>
+        <div class="row pl-5 pr-5 mt-2">
+            <div class="col-xs-12 col-md-3 col-sm-5">
+                <button type="button" id="exportBtn-milestone" data-toggle="tooltip" title="Export as PDF File"><i class="fa fa-file-pdf-o icon-export mr-3"></i>Export</button>
+            </div>
+        </div>
+        <div class="row pl-5 pr-5 mt-2">
+            <div class="col-12 mt-3">
+                <span class="communities-text">Filter By Date Created</span>
+            </div>
+        </div>
+        <div class="row align-content-center pl-5 pr-5">
+            <div class="col-sm-3 col-md-3 col-sm-6 mt-3">
+                <div class="datepicker date input-group p-0 inputWrapper-communities">
+                    <input type="text" placeholder="From" id="fromDate-milestone">
+                    <div class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar icon-communities"></i></span></div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-sm-6 mt-3">
+                <div class="datepicker date input-group p-0 inputWrapper-communities">
+                    <input type="text" placeholder="To" id="toDate-milestone">
+                    <div class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar icon-communities"></i></span></div>
+                </div>
+            </div>
+            <div class="col-sm-0 col-md-2"></div>
+            <div class="col-md-4 col-sm-12 mt-3">
+                <div class="d-flex align-content-center inputWrapper-communities" id="searchWrapper" >
+                    <i class="fa fa-search fa-search-communities icon-communities mr-2 ml-2"></i>
+                    <input class="form-input-communities" type="text" id="searchTxb-milestone" placeholder="Search">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3 pl-5 pr-5">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table w-100" id="milestone-table">
+                        <thead>
+                            <tr>
+                                <th>Date Created</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>12-25-2020</td>
+                                <td>Rococo Global Technologies</td>
+                                <td>Rococo Global Technologies is a asljhdlsjkfhoasjdpodjifpgigjp</td>
+                                <td><span data-toggle="tooltip" title="Edit"><button type="button" class="column-button edit-button-view-student ml-1 mr-1 mt-1" id="" 
+                                    data-toggle="modal" data-target="#view-milestone-modal"><i class="fa fa-pencil button-icon-communities"></i></button></span>
+                                    </td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Add Company Modal-->
+    <div class="modal fade" id="add-milestone-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-content-communities">
+            <div class="modal-header">
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">Add Company
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="container">
+                    <div class="row justify-content-center row-edit-community">
+                        <div class="col-md-10 col-sm-9">
+                            <img src="background.png" alt="" class="image-background">
+                            <input type="file" class="fileInput" hidden>
+                            <button class="uploadPhotoBtn pageBtn labels" type="button">Upload Photo</button>
+                        </div>
+                    </div>
+                    <div class="row row-edit-community mt-4" method="POST">
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Company Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Description</p>
+                            <div class="form-item inputWrapper">
+                                <textarea class="form-input name="community_description" rows="6"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Wanted Jobs</p>
+                            <div class="form-item d-flex align-content-center inputWrapper ui-widget">
+                                <input class="form-input form-input-view-student add-job-txb" value="">
+                                <button type="button" class="w-40 addJobBtn" id="addBtn">Add Job</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-item inputWrapper tag-container-job-companies tag-container-job-companies-job d-flex">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Required Skills</p>
+                            <div class="form-item d-flex align-content-center inputWrapper ui-widget">
+                                <input class="form-input form-input-view-student add-skill-txb" value="">
+                                <button type="button" class="w-40 addSkillBtn" id="addBtn">Add Skill</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-item inputWrapper tag-container-job-companies tag-container-job-companies-skill d-flex">
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="pageBtn labels float-right" type="submit">Add</button>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="background.png" alt="" id="image-content-modal">
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--View Company Modal-->
+      <div class="modal fade" id="view-milestone-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-content-communities">
+            <div class="modal-header">
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">Edit Company
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="container">
+                    <div class="row justify-content-center row-edit-community">
+                        <div class="col-md-10 col-sm-9">
+                            <img src="background.png" alt="" class="image-background">
+                            <input type="file" class="fileInput" hidden>
+                            <button class="uploadPhotoBtn pageBtn labels" type="button">Upload Photo</button>
+                        </div>
+                    </div>
+                    <div class="row row-edit-community mt-4" method="POST">
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Company Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Description</p>
+                            <div class="form-item inputWrapper">
+                                <textarea class="form-input name="community_description" rows="6"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Wanted Jobs</p>
+                            <div class="form-item d-flex align-content-center inputWrapper ui-widget">
+                                <input class="form-input form-input-view-student add-job-txb" value="">
+                                <button type="button" class="w-40 addJobBtn" id="addBtn">Add Job</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-item inputWrapper tag-container-job-companies tag-container-job-companies-job d-flex">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Required Skills</p>
+                            <div class="form-item d-flex align-content-center inputWrapper ui-widget">
+                                <input class="form-input form-input-view-student add-skill-txb" value="">
+                                <button type="button" class="w-40 addSkillBtn" id="addBtn">Add Skill</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-item inputWrapper tag-container-job-companies tag-container-job-companies-skill d-flex">
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="pageBtn labels float-right" type="submit">Add</button>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="background.png" alt="" id="image-content-modal">
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+<!--Try Again Skill-->
+<div class="modal fade" id="skill-not-found-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+    <div class="modal-header">
+    <h5 class="modal-title labels" id="exampleModalLabel">Skill Not Found</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form action="" method="POST">
+    <input type="text" name="cIdNum" value="{{customer.id}}" hidden>
+<div class="modal-body">
+    <p class="">Skill is not listed in the database. You can try to add the skill in the Skill and Skill Category Section before performing an association.</p>
+</div>
+<!--Try Again Job-->
+<div class="modal fade" id="job-not-found-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+    <div class="modal-header">
+    <h5 class="modal-title labels" id="exampleModalLabel">Skill Not Found</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form action="" method="POST">
+    <input type="text" name="cIdNum" value="{{customer.id}}" hidden>
+<div class="modal-body">
+    <p class="">Skill is not listed in the database. You can try to add the job in the Job Section before performing an association.</p>
+</div>
+</form>
+</div>
+</div>
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.21/dataRender/ellipsis.js"></script>
+    <script src="addCommunity.js"></script>
+    <script src="job-companies.js"></script>
+    <script src="departments-colleges.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Student Detail</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://use.fontawesome.com/43bd965db5.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="viewStudent.css">
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="communities.css">
+    <link rel="stylesheet" href="createCommunity.css">
+</head>
+<body>
+    <!--Student Information-->
+    <div class="container container-communities">
+        <div class="row">
+            <div class="col-sm-12 col-md-3 p-0">
+                <p class="text-center pageTitle p-1">Personal Information</p>
+            </div>
+        </div>
+        <form class="row">
+            <div class="col-md-4 mb-4 mt-4">
+                <section>
+                    <div class="card mb-4 view-student-card">
+
+                        <div class="card-header bg-white text-center py-3">
+                            <h5 class="mb-0 labels">Profile Picture</h5>
+                        </div>
+
+                        <div class="card-body d-flex justify-content-center">
+                            <img src="background.png" alt="" style="width: 200px;" id="profile-image-view-student">
+                        </div>
+                    </div>
+                    <div style="height:0px;overflow:hidden">
+                        <input type="file" id="fileInput-view-student" name="fileInput" />
+                     </div>
+                    <button type="button" class="btn btn-block mb-4 upload-profile-pic-student-btn w-75" id="upload-profile-pic-view-student-btn">Upload Photo</button>
+                </section>
+            </div>
+            <div class="col-md-8">
+                <section class="p-4">
+                    <div class="row">
+                        <div class="col-md-6 col-view-student">
+                            <p class="labels mt-2">Student Id</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="181818181" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-view-student">
+                            <p class="labels mt-2">Nickname</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="#sdaerf" required disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels text-muted mb-0">Name</p>
+                        </div>
+                        <div class="col-md-4 col-view-student">
+                            <p class="labels mt-2">First Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="Ervin Niño" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="labels mt-2">Middle Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="Ramos">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="labels mt-2">Last Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="Pelonio" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels text-muted mb-0">Address</p>
+                        </div>
+                        <div class="col-md-4 col-view-student">
+                            <p class="labels mt-2">Street</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="Kahumayan">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="labels mt-2">Barangay</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="Campangga" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="labels mt-2">City/Town</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="Barili" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="labels mt-2">Province</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="Cebu" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="labels mt-2">Zip</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="6036" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="labels mt-2">Country</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="Philippines" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <label class="labels mt-2">Contact Number</label>
+                            <button onclick="AddContactNumberViewStudent(this)" class="icon-button ml-2" data-toggle="tooltip" title="Add Contact Number" type="button"><i class="fa fa-plus fa-view-student" ></i></button>
+                        </div>
+                            <div class="col-md-4 mt-2">
+                                <div class="form-item d-flex inputWrapper">
+                                <span class="d-flex align-items-center mr-1">+63</span>
+                                <input class="form-input form-input-view-student" type="text" value="" name="contact_number" pattern="[0-9]{10}" placeholder="9334123456">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-view-student">
+                            <p class="labels mt-5">College</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <select name="college_belong" id="" class="w-100 select-create-community">
+                                    <option value="College of Computer Studies" selected>College of Computer Studies</option>
+                                    <option value="College of Engineering">College of Engineering</option>
+                                </select>
+                            </div>
+                        </div>
+                            <div class="col-md-6 col-view-student">
+                                <p class="labels mt-5">Department</p>
+                                <div class="form-item d-flex align-content-center inputWrapper">
+                                    <select name="department_belong" id="" class="w-100 select-create-community">
+                                        <option value="Computer Science" selected>Computer Science</option>
+                                        <option value="Information Technology">Information Technology</option>
+                                    </select>
+                                </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-sm-12">
+                <button type="submit" class="float-right mr-5" id="updateBtn-view-student">Update</button>
+            </div>
+        </form>
+    </div>
+    <!--Skills Table-->
+    <div class="container container-communities">
+        <div class="row">
+            <div class="col-sm-12 col-md-3 p-0">
+                <p class="text-center pageTitle p-1">Skills</p>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-sm-12 col-md-4 mr-5">
+                <button type="button" class="float-right" id="addBtn" data-toggle="modal" data-target="#add-skill-modal">Grant Skill</button>
+            </div>
+        </div>
+        <div class="row pl-5 pr-5 mt-2">
+            <div class="col-xs-12 col-md-3 col-sm-5">
+                <button type="button" id="exportBtn-skill" data-toggle="tooltip" title="Export as PDF File"><i class="fa fa-file-pdf-o icon-export mr-3"></i>Export</button>
+            </div>
+        </div>
+        <div class="row pl-5 pr-5 mt-2">
+            <div class="col-12 mt-3">
+                <span class="communities-text">Filter By Date Acquired</span>
+            </div>
+        </div>
+        <div class="row align-content-center pl-5 pr-5">
+            <div class="col-sm-3 col-md-3 col-sm-6 mt-3">
+                <div class="datepicker date input-group p-0 inputWrapper-communities">
+                    <input type="text" placeholder="From" id="fromDate-skill">
+                    <div class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar icon-communities"></i></span></div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-sm-6 mt-3">
+                <div class="datepicker date input-group p-0 inputWrapper-communities">
+                    <input type="text" placeholder="To" id="toDate-skill">
+                    <div class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar icon-communities"></i></span></div>
+                </div>
+            </div>
+            <div class="col-sm-0 col-md-2"></div>
+            <div class="col-md-4 col-sm-12 mt-3">
+                <div class="d-flex align-content-center inputWrapper-communities" id="searchWrapper" >
+                    <i class="fa fa-search fa-search-communities icon-communities mr-2 ml-2"></i>
+                    <input class="form-input-communities" type="text" id="searchTxb-skill" placeholder="Search">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3 pl-5 pr-5">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table w-100" id="skill-table">
+                        <thead>
+                            <tr>
+                                <th>Date Acquired</th>
+                                <th>Name</th>
+                                <th>Level</th>
+                                <th>Current Points</th>
+                                <th>Points to Next Level</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>12-25-2020</td>
+                                <td>C++ Programming</td>
+                                <td>3</td>
+                                <td>25000</td>
+                                <td>30000</td>
+                                <td><span data-toggle="tooltip" title="Edit"><button type="button" class="column-button edit-button-view-student ml-1 mr-1 mt-1" id="" 
+                                    data-toggle="modal" data-target="#edit-skill-modal"><i class="fa fa-pencil button-icon-communities"></i></button></span>
+                                    <span data-toggle="tooltip" title="Delete"><button type="button" class="column-button delete-button ml-1 mr-1 mt-1" id="" 
+                                    data-toggle="modal" data-target="#delete-skill-modal"> <i class="fa fa-trash button-icon-communities"></i></button></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Add Skill Modal-->
+    <div class="modal fade" id="add-skill-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-content-communities">
+            <div class="modal-header">
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">Grant A Skill
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form class="row row-edit-community" method="POST">
+                        <div class="col-sm-12 col-md-6">
+                            <p class="labels">Skill Category</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <select name="skill_category" id="" class="w-100 select-create-community">
+                                    <option value="Visual Spatial Intelligence">Visual Spatial Intelligence</option>
+                                    <option value="Mathematical Logical Intelligence" selected>Mathematical Logical Intelligence</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <p class="labels">Skill Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <select name="skill_category" id="" class="w-100 select-create-community">
+                                    <option value="Visual Spatial Intelligence">Java Programming</option>
+                                    <option value="Mathematical Logical Intelligence" selected>Csharp Programming</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Level</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="number" value="1" min="0">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Points In Level</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="number" value="0" min="0">
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="pageBtn labels float-right" type="submit">Grant</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Edit Skill Modal-->
+      <div class="modal fade" id="edit-skill-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-content-communities">
+            <div class="modal-header">
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">Student Skill
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form class="row row-edit-community" method="POST">
+                        <div class="col-sm-12 col-md-6">
+                            <p class="labels">Skill Category</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <select name="skill_category" id="" class="w-100 select-create-community" disabled>
+                                    <option value="Visual Spatial Intelligence">Visual Spatial Intelligence</option>
+                                    <option value="Mathematical Logical Intelligence" selected>Mathematical Logical Intelligence</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <p class="labels">Skill Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <select name="skill_category" id="" class="w-100 select-create-community" disabled>
+                                    <option value="Visual Spatial Intelligence">C++ Programming</option>
+                                    <option value="Mathematical Logical Intelligence" selected>Csharp Programming</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Level</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="number" value="3" min="0">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Points In Level</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="number" value="25000" min="0">
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="pageBtn labels float-right" type="submit">Update</button>
+                        </div>
+                    </form>
+                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="background.png" alt="" id="image-content-modal">
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Delete Skill Modal-->
+      <div class="modal fade" id="delete-skill-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title labels" id="exampleModalLabel">Are you sure you want to delete this skill?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form action="" method="POST">
+        <input type="text" name="cIdNum" value="{{customer.id}}" hidden>
+    <div class="modal-body">
+        <input type="checkbox" name="" class="mt-0 ml-2 mb-0 mr-3 inputWrapper is-admin-checkbox understand-checkbox">
+        <label for=""> I understand that the skill once deleted will be irretrievable.</label>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn pageBtn" data-dismiss="modal" style="width: fit-content;">NO</button>
+        <button type="submit" class="btn btn-primary" id="btnDelete" name="btnDelete" disabled>YES</button>
+    </div>
+</form>
+</div>
+</div>
+</div>
+    <!--Milestones Table-->
+    <div class="container container-communities">
+        <div class="row">
+            <div class="col-sm-12 col-md-3 p-0">
+                <p class="text-center pageTitle p-1">Milestone</p>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-sm-12 col-md-4 mr-5">
+                <button type="button" class="float-right" id="addBtn" data-toggle="modal" data-target="#add-milestone-modal">Add Milestone</button>
+            </div>
+        </div>
+        <div class="row pl-5 pr-5 mt-2">
+            <div class="col-xs-12 col-md-3 col-sm-5">
+                <button type="button" id="exportBtn-milestone" data-toggle="tooltip" title="Export as Excel File"><i class="fa fa-file-pdf-o icon-export mr-3"></i>Export</button>
+            </div>
+        </div>
+        <div class="row pl-5 pr-5 mt-2">
+            <div class="col-12 mt-3">
+                <span class="communities-text">Filter By Date Acquired</span>
+            </div>
+        </div>
+        <div class="row align-content-center pl-5 pr-5">
+            <div class="col-sm-3 col-md-3 col-sm-6 mt-3">
+                <div class="datepicker date input-group p-0 inputWrapper-communities">
+                    <input type="text" placeholder="From" id="fromDate-milestone">
+                    <div class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar icon-communities"></i></span></div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-sm-6 mt-3">
+                <div class="datepicker date input-group p-0 inputWrapper-communities">
+                    <input type="text" placeholder="To" id="toDate-milestone">
+                    <div class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar icon-communities"></i></span></div>
+                </div>
+            </div>
+            <div class="col-sm-0 col-md-2"></div>
+            <div class="col-md-4 col-sm-12 mt-3">
+                <div class="d-flex align-content-center inputWrapper-communities" id="searchWrapper" >
+                    <i class="fa fa-search fa-search-communities icon-communities mr-2 ml-2"></i>
+                    <input class="form-input-communities" type="text" id="searchTxb-milestone" placeholder="Search">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3 pl-5 pr-5">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table w-100" id="milestone-table">
+                        <thead>
+                            <tr>
+                                <th>Date Acquired</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>12-25-2020</td>
+                                <td>The Conqueror</td>
+                                <td>Award</td>
+                                <td><span data-toggle="tooltip" title="View"><button type="button" class="column-button view-button ml-1 mr-1 mt-1" id="" 
+                                    data-toggle="modal" data-target="#view-milestone-modal"><i class="fa fa-eye button-icon-communities"></i></button></span>
+                                    <span data-toggle="tooltip" title="Delete"><button type="button" class="column-button delete-button ml-1 mr-1 mt-1" id="" 
+                                    data-toggle="modal" data-target="#delete-milestone-modal"> <i class="fa fa-trash button-icon-communities"></i></button></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Add Milestone Modal-->
+    <div class="modal fade" id="add-milestone-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-content-communities">
+            <div class="modal-header">
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">Add Milestone
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="container">
+                    <div class="row justify-content-center row-edit-community">
+                        <div class="col-md-10 col-sm-9">
+                            <img src="background.png" alt="" class="image-background">
+                            <input type="file" class="fileInput" hidden>
+                            <button class="uploadPhotoBtn pageBtn labels" type="button">Upload Photo</button>
+                        </div>
+                    </div>
+                    <div class="row row-edit-community mt-4" method="POST">
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Milestone Type</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <select name="community_type" id="" class="w-100 select-create-community">
+                                    <option value="Award">Award</option>
+                                    <option value="Certificate" selected>Certificate</option>
+                                    <option value="Badge">Badge</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Milestone Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Description</p>
+                            <div class="form-item inputWrapper">
+                                <textarea class="form-input name="community_description" rows="6"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Direct Link</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="url" value="">
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="pageBtn labels float-right" type="submit">Add</button>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="background.png" alt="" id="image-content-modal">
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--View Milestone Modal-->
+      <div class="modal fade" id="view-milestone-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-content-communities">
+            <div class="modal-header">
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">Add Milestone
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="container">
+                    <div class="row justify-content-center row-edit-community">
+                        <div class="col-md-10 col-sm-9">
+                            <img src="background.png" alt="" class="image-background">
+                            <input type="file" class="fileInput" hidden>
+                            <button class="uploadPhotoBtn pageBtn labels" type="button">Upload Photo</button>
+                        </div>
+                    </div>
+                    <div class="row row-edit-community mt-4" method="POST">
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Milestone Type</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <select name="community_type" id="" class="w-100 select-create-community" disabled>
+                                    <option value="Award" selected>Award</option>
+                                    <option value="Certificate">Certificate</option>
+                                    <option value="Badge">Badge</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Milestone Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="The Conqueror">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Description</p>
+                            <div class="form-item inputWrapper">
+                                <textarea class="form-input name="community_description" rows="6">The conqueror milestone is for those who have dedicated time and effort in honing a certain skill and thus earned the seat of the best.</textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Direct Link</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="url" value="">
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="pageBtn labels float-right" type="submit">Update</button>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="background.png" alt="" id="image-content-modal">
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Delete Milestone Modal-->
+      <div class="modal fade" id="delete-milestone-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title labels" id="exampleModalLabel">Are you sure you want to delete this milestone?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form action="" method="POST">
+        <input type="text" name="cIdNum" value="{{customer.id}}" hidden>
+    <div class="modal-body">
+        <input type="checkbox" name="" class="mt-0 ml-2 mb-0 mr-3 inputWrapper is-admin-checkbox understand-checkbox">
+        <label for=""> I understand that the milestone once deleted can no longer be retrieved</label>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn pageBtn" data-dismiss="modal" style="width: fit-content;">NO</button>
+        <button type="submit" class="btn btn-primary" id="btnDelete" name="btnDelete" disabled>YES</button>
+    </div>
+</form>
+</div>
+</div>
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.21/dataRender/ellipsis.js"></script>
+    <script src="addCommunity.js"></script>
+    <script src="viewStudent.js"></script>
+</body>
+</html>
+

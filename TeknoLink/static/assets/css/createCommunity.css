@@ -1,0 +1,113 @@
+*{
+    font-family: 'Inter', sans-serif;
+    line-height: 19px;
+    color: #6A6868
+}
+.image-background{
+    height: 35vh;
+    width: 100%;
+    object-fit: cover;
+}
+.container .uploadPhotoBtn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+  }
+.pageBtn{
+    background-color: #FFD700;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    height: 38px;
+    width: 190px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+.pageBtn:hover{
+    background-color: #FFE55A;
+}
+.image-background:hover{
+      opacity: 0.8;
+      cursor: pointer;
+  }
+body{
+    background-color:#F5F6F8 ;
+}
+.row-edit-community{
+    background-color: white;
+    padding: 3vh;
+}
+.container-create-community{
+    margin-top: 50px;
+}
+.labels{
+    color: #800000;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+}
+.form-input,.form-input:focus{
+    border: 0px;
+    outline: none;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    width: 100%;
+}
+.fa-create-community{
+    color: #800000;
+}
+.form-item{
+    width: 100%;
+    height: fit-content;
+    left: 0px;
+    top: 0px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    box-shadow: 0px 9px 20px -9px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    padding: 5px 15px;
+}
+.icon-button{
+    border-radius: 50%;
+    border:1px solid #800000;
+    background-color: white;
+    outline: none;
+    font-size: 1.9em;
+}
+/*for rows added through addContact Button*/
+.added-row{
+    padding-left: 15px;
+}
+.inputWrapper:focus-within{
+    box-shadow: 0 0 0 2pt #FFE55A;
+}
+.remove-icon{
+    color:  #C01717;
+}
+.select-create-community{
+    border: 0px;
+    height: 2em;
+}
+.select-create-community:focus{
+    outline: none;
+}
+.toggle-help-create-community{
+    font-size: 1.8em;
+    color: gray;
+}
+.is-admin-container{
+    height: 2em;
+}
+.is-admin-checkbox{
+    height: 1.4em;
+    width: 1.4em;
+}
+#image-content-modal{
+    max-width: 70vw;
+    max-height: 70vh;
+}
