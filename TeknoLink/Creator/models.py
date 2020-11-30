@@ -1,16 +1,32 @@
 from django.db import models
 from django.utils.timezone import now as date_now
 
+
 class User(models.Model):
     user_id=models.CharField(max_length=50,primary_key=True,default=date_now)
     password=models.CharField(max_length=25)
     user_type=models.CharField(max_length=25,default='Student')
+
+    def getContactNumbers(self):
+        contact_numbers=User_Contact_Number.objects.filter(user=self.user_id) 
+        if contact_numbers:
+            return contact_numbers
+        else:
+            return None
+    
     class Meta:
         db_table='User'
 
+class User_Contact_Number(models.Model):
+    contact_number=models.CharField(max_length=11)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    class Meta:
+        db_table='User_Contact_Number'
+
+
 class Community(User):
     date_created=models.DateField(default=date_now)
-    name=models.CharField(max_length=50,primary_key=True)
+    name=models.CharField(max_length=50)
     create_admin_id=models.ForeignKey('self',null=True,blank=True,on_delete=models.CASCADE,related_name='create_admin_id_set')
     isAdmin=models.BooleanField()
     isOffice=models.BooleanField()
@@ -24,22 +40,29 @@ class Community(User):
         db_table='Community'
 
 class College(models.Model):
+    date_created=models.DateField(default=date_now)
     name=models.CharField(max_length=100)
     description=models.TextField(null=True,blank=True)
+    location=models.CharField(max_length=200,null=True,blank=True)
 
     class Meta:
         db_table='College'
 
 class Department(models.Model):
+    date_created=models.DateField(default=date_now)
     name=models.CharField(max_length=100)
     description=models.TextField(null=True,blank=True)
     college_id=models.ForeignKey(College,null=False,blank=False,on_delete=models.CASCADE)
+    location=models.CharField(max_length=200,null=True,blank=True)
 
     class Meta:
         db_table='Department'
 
 class Student(User):
+    date_created=models.DateField(default=date_now)
+    student_id_editable=models.CharField(max_length=50,default=date_now)
     first_name=models.CharField(max_length=50)
+    alias=models.CharField(max_length=50,null=True,blank=True)
     middle_name=models.CharField(max_length=50)
     last_name=models.CharField(max_length=50)
     street_address=models.CharField(max_length=100, null=True, blank=True)
@@ -49,15 +72,9 @@ class Student(User):
     zip_address=models.CharField(max_length=20)
     country_address=models.CharField(max_length=100,null=True,blank=True)
     department_id=models.ForeignKey(Department,null=False,blank=False,on_delete=models.CASCADE)
+    profile_picture=models.ImageField(null=True,blank=True)
     class Meta:
         db_table='Student'
-
-class User_Contact_Number(models.Model):
-    user_id=models.ForeignKey(User,null=False,blank=False,on_delete=models.CASCADE,to_field='user_id')
-    contact_number=models.CharField(max_length=11)
-
-    class Meta:
-        db_table='User_Contact_Number'
 
 class Chat_Room(models.Model):
     room_id=models.AutoField(primary_key=True)
@@ -136,7 +153,7 @@ class Activity(models.Model):
     valid_until_date=models.DateField(null=True)
     parent_activity_id=models.ForeignKey('self',null=True,blank=True,on_delete=models.CASCADE)
     status_admin_id=models.ForeignKey(Community,null=True,blank=True,on_delete=models.CASCADE,related_name='activity_status_admin')
-    creator_community_id=models.ForeignKey(Community,null=False,blank=False,on_delete=models.CASCADE,related_name='activity_creator_id')
+    creator_community_id=models.ForeignKey(Community,null=False, blank=False, on_delete=models.CASCADE,related_name='activity_creator_id')
     chat_room_id=models.ForeignKey(Chat_Room,null=False,blank=False,on_delete=models.CASCADE)
     activity_type=models.CharField(default='Announcement', max_length=50)
 
@@ -208,13 +225,22 @@ class Activity_Student_Target(models.Model):
 
     class Meta:
         db_table="Activity_Student_Target"
+class Student_Post_Type(models.Model):
+    name=models.CharField(max_length=20,primary_key=True)
 
+    class Meta:
+        db_table='Student_Post_Type'
 class Student_Post(models.Model):
+    date_created=models.DateField(default=date_now)
     name=models.CharField(max_length=50)
     description=models.TextField()
+    post_type=models.ForeignKey(Student_Post_Type,on_delete=models.CASCADE,null=False,blank=False)
     creator_student_id=models.ForeignKey(Student,null=False,blank=False,on_delete=models.CASCADE)
     room_id=models.ForeignKey(Chat_Room,null=False,blank=False,on_delete=models.CASCADE)
-    
+    image=models.ImageField(null=True,blank=True)
+
+    def getAssociatedReports(self):
+        return Post_Report.objects.filter(post_id=self.id)
     class Meta:
         db_table='Student_Post'
 
@@ -240,10 +266,14 @@ class Report_Type(models.Model):
         db_table='Report_Type'
 
 class Post_Report(models.Model):
+    date_created=models.DateField(default=date_now)
     post_id=models.ForeignKey(Student_Post,null=False,blank=False,on_delete=models.CASCADE,related_name='post_id')
     reporter_student_id=models.ForeignKey(Student,null=False,blank=False,on_delete=models.CASCADE, related_name='reporter_student_id')
     report_type_id=models.ForeignKey(Report_Type,null=False,blank=False,on_delete=models.CASCADE)
     description=models.TextField(null=True,blank=True)
+
+    def deleteFiles(self):
+        Report_File.objects.filter(report_id=self.id).delete()
 
     class Meta:
         db_table='Post_Report'
@@ -257,16 +287,16 @@ class Report_File(models.Model):
 
 class Milestone_Type(models.Model):
     name=models.CharField(max_length=100,primary_key=True)
-    description=models.TextField(null=True,blank=True)
 
     class Meta:
         db_table='Miletone_Type'
 
 class Milestone(models.Model):
+    date_acquired=models.DateField(default=date_now)
+    name=models.CharField(max_length=100)
     owner_student_id=models.ForeignKey(Student,null=False,blank=False,on_delete=models.CASCADE)
     milestone_type_id=models.ForeignKey(Milestone_Type,null=False,blank=False,on_delete=models.CASCADE)
     text=models.TextField()
-    milestone_datetime=models.DateField(auto_now_add=True)
     directlink=models.TextField()
     milestone_photo=models.ImageField(null=True, blank=True)
 
@@ -326,6 +356,7 @@ class Student_Aim_Job(models.Model):
         db_table='Student_Aim_Job'
 
 class Skill_Category(models.Model):
+    date_created=models.DateField(default=date_now)
     name=models.CharField(max_length=50)
     description=models.TextField()
 
@@ -333,6 +364,7 @@ class Skill_Category(models.Model):
         db_table='Skill_Category'
 
 class Skill(models.Model):
+    date_created=models.DateField(default=date_now)
     name=models.CharField(max_length=50)
     description=models.TextField()
     category=models.ForeignKey(Skill_Category, on_delete=models.CASCADE)
@@ -352,8 +384,10 @@ class Student_Possess_Skill(models.Model):
     skill_id=models.ForeignKey(Skill, on_delete=models.CASCADE)
     level=models.IntegerField()
     points_in_level=models.IntegerField()
-    points_to_next_level=models.IntegerField()
+    date_acquired=models.DateField(default=date_now)
 
+    def getMaxSkillPoint(self):
+        return self.level*100-1
     class Meta:
         db_table='Student_Possess_Skill'
 
@@ -372,7 +406,7 @@ class Student_Watch_Skill(models.Model):
         db_table='Student_Watch_Skill'
 
 class Community_Improve_Skill(models.Model):
-    community_id=models.ForeignKey(Community, on_delete=models.CASCADE)
+    community_id=models.ForeignKey(Community, null=False, blank=False, on_delete=models.CASCADE)
     skill_id=models.ForeignKey(Skill, on_delete=models.CASCADE)
     skill_percentage_boost=models.DecimalField(max_digits=5, decimal_places=2,default=.05)
 

@@ -4,6 +4,9 @@
     font-weight: 300;
     color: #6A6868
 }
+::placeholder{
+    color: rgb(219, 217, 217);
+}
 .container-communities{
     background-color: white;
     padding-bottom: 50px;
@@ -142,5 +145,32 @@ body{
 }
 .modal-open{
     overflow-y: scroll;
+}
+.invalid-username{
+    color: #C01717;
+    border: 2px solid #C01717;
+    padding: 10px;
+    margin: auto 0;
+}
+.valid-username{
+    color: rgb(141, 230, 7);
+    border: 2px solid rgb(141, 230, 7);
+    margin: auto 0;
+    padding: 10px;
+}
+.update-button-create-community-disabled{
+    pointer-events: none;
+}
+.table thead th {
+    vertical-align: bottom !important;
+    border-bottom: 2px solid #dee2e6 !important;
+}
+.table td, .table th {
+    padding: .75rem !important;
+    border-top: 1px solid #dee2e6 !important;
+    border-radius: 0px !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
 }
 

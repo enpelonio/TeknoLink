@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Students</title>
+    {%load static%}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://use.fontawesome.com/43bd965db5.js"></script>
@@ -16,13 +17,60 @@
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
     <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
-    <link rel="stylesheet" href="communities.css">
-    <link rel="stylesheet" href="createCommunity.css">
-    <link rel="stylesheet" href="viewStudent.css">
-    <link rel="stylesheet" href="activities.css">
+    <link rel="stylesheet" href="{%static 'assets/css/sidebar.css'%}">
+    <link rel="stylesheet" href="{% static 'assets/css/communities.css'%}">
+    <link rel="stylesheet" href="{% static 'assets/css/createCommunity.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/viewStudent.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/activities.css'%}">
 </head>
 <body>
-    <div class="container container-communities">
+<div class="wrapper d-flex align-items-stretch ">
+    <nav id="sidebar" class="" style="height: 100vh;">
+        <div class="custom-menu ">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary ">
+                <i class="fa fa-bars " style="color: white;"></i>
+                <span class="sr-only ">Toggle Menu</span>
+            </button>
+        </div>
+        <div class="p-4 ">
+            <div class="d-flex flex-row align-items-stretch ">
+                <img src="{%static 'assets/img/navlogo.png'%}" alt=" " height="40 " width="40 " style="margin-right: 20px; ">
+                <div>
+                    <h5><b> TeknoLink Administrator</b></h5>
+                </div>
+            </div>
+            <hr>
+            <br>
+            <ul class="list-unstyled components mb-5 ">
+                <li class="active">
+                    <a href="{% url 'Creator:students_view' %}"><span  class="fa fa-graduation-cap mr-3 " id="yellow"></span> Student</a>
+                </li>
+                <li>
+                    <a href="{% url 'Creator:student_posts_view' %}"><span  class="fa fa-clipboard mr-3 "></span> Student Post</a>
+                </li>
+                <li>
+                    <a href="{% url 'Creator:communities_view' %} "><span class="fa fa-sitemap mr-3 "></span> Community</a>
+                </li>
+                <li>
+                    <a href="{% url 'Creator:skill_skill_category_view' %}"><span class="fa fa-level-up mr-3 "></span> Skill/Category</a>
+                </li>
+                <li>
+                    <a href="{% url 'Creator:departments_colleges_view' %} "><span class="fa fa-university mr-3 "></span> College/Department</a>
+                </li>
+                <li>
+                    <a href="#"><span class="fa fa-briefcase mr-3 "></span> Job/Company</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class=" " style="width:100%; ">
+        <div class="topbaR">
+            <div>
+                <i class="fa fa-bell-o fa-lg " aria-hidden="true "></i>
+            </div>
+        </div>
+        <div style="overflow-y: scroll; height: 100vh;">
+    <div class="container container-communities mb-5">
         <div class="row">
             <div class="col-sm-12 col-md-3 p-0">
                 <p class="text-center pageTitle p-1">Students</p>
@@ -30,12 +78,12 @@
         </div>
         <div class="row justify-content-end">
             <div class="col-sm-12 col-md-4 mr-5">
-                <button type="button" class="float-right" id="addBtn" onclick="window.open('viewStudent.html', '_blank');">Add a Student</button>
+                <button type="button" class="float-right" id="addBtn" data-toggle="modal" data-target="#add-student-modal">Add a Student</button>
             </div>
         </div>
         <div class="row pl-5 pr-5 mt-2">
             <div class="col-xs-12 col-md-3 col-sm-5">
-                <button type="button" id="exportBtn" data-toggle="tooltip" title="Export as Excel File"><i class="fa fa-file-pdf-o icon-export mr-3"></i>Export</button>
+                <button type="button" id="exportBtn" data-toggle="tooltip" title="Export as PDF File"><i class="fa fa-file-pdf-o icon-export mr-3"></i>Export</button>
             </div>
         </div>
         <div class="row pl-5 pr-5 mt-2">
@@ -66,17 +114,18 @@
             <div class="col-sm-12 mt-3">
                 <label for="" class="mr-2"> Show</label>
                 <label for="" class="ml-2 mr-2">College:</label>
-                <select name="" id="select-type-activities" class="ml-2 mr-2 select-activities">
-                    <option value="" selected>All</option>
-                    <option value="Computer Studies">Computer Studies</option>
-                    <option value="Architecture">Architecture</option>
-                    <option value="Nursing">Nursing</option>
+                <select name="" id="select-type-activities-student" class="ml-2 mr-2 select-activities">
+                    <option value="">All</option>
+                    {%for college in colleges%}
+                    <option value="{{college.name}}">{{college.name}}</option>
+                    {%endfor%}
                 </select>
                 <label for="" class="ml-2 mr-2">Department:</label>
-                <select name="" id="select-status-activities" class="ml-2 mr-2 select-activities">
+                <select name="" id="select-status-activities-student" class="ml-2 mr-2 select-activities">
                     <option value="" selected>All</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Information Technology">Information Technology</option>
+                    {%for department in departments%}
+                    <option value="{{department.name}}">{{department.name}}</option>
+                    {%endfor%}
                 </select>
             </div>
         </div>
@@ -96,27 +145,30 @@
                             </tr>
                         </thead>
                         <tbody>
+                        {%for student in students%}
                             <tr>
-                                <td>12-25-2020</td>
-                                <td>111-1111-111</td>
-                                <td>John Doe</td>
-                                <td>Jan Do</td>
-                                <td>Computer Studies</td>
-                                <td>Computer Science</td>
-                                <td><span data-toggle="tooltip" title="Edit"><button type="button" class="column-button edit-button-view-student ml-1 mr-1 mt-1" id="" onclick="window.open('viewStudent.html', '_blank');"
-                                    ><i class="fa fa-pencil button-icon-communities"></i></button></span>
+                                <td>{{student.date_created|date:'m-d-Y' }}</td>
+                                <td>{{student.user_id}}</td>
+                                <td>{{student.last_name}}, {{student.first_name}} {{student.middle_name}}</td>
+                                <td>{{student.alias}}</td>
+                                <td>{{student.department_id.college_id.name}}</td>
+                                <td>{{student.department_id.name}}</td>
+                                <td><form method="POST"> {% csrf_token %}<input type="text" value="{{student.user_id}}" name="idStud" hidden><span data-toggle="tooltip" title="Edit"><button type="submit" class="column-button edit-button-view-student ml-1 mr-1 mt-1" id="" name='btnViewStudent'
+                                    ><i class="fa fa-pencil button-icon-communities"></i></button></span></form>
                                     <span data-toggle="tooltip" title="Delete"><button type="button" class="column-button delete-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#delete-community-modal"> <i class="fa fa-trash button-icon-communities"></i></button></span>
+                                    data-toggle="modal" data-target="#delete-{{student.user_id}}-modal"> <i class="fa fa-trash button-icon-communities"></i></button></span>
                                 </td>
                             </tr>
+                        {%endfor%}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+    {%for student in students%}
       <!--Delete Student Modal-->
-      <div class="modal fade" id="delete-community-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+      <div class="modal fade" id="delete-{{student.user_id}}-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -126,7 +178,8 @@
         </button>
     </div>
     <form action="" method="POST">
-        <input type="text" name="cIdNum" value="{{customer.id}}" hidden>
+        {%csrf_token%}
+        <input type="text" name="idStud" value="{{student.user_id}}" hidden>
     <div class="modal-body">
         <input type="checkbox" name="" class="mt-0 ml-2 mb-0 mr-3 inputWrapper is-admin-checkbox understand-checkbox">
         <label for=""> I understand that everything about the student will be deleted, acquired skills, milestones etc.</label>
@@ -139,6 +192,161 @@
 </div>
 </div>
 </div>
+{%endfor%}
+
+<!--Add Student Modal-->
+<div class="modal fade" id="add-student-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content modal-content-communities">
+        <div class="modal-header">
+            <h5 class="modal-title text-center labels" id="exampleModalLabel">Add Student
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form class="row" method="POST" enctype="multipart/form-data" style="background-color: white; margin: 10px; padding-bottom: 20px;">
+        {% csrf_token %}
+            <input type="text" value="" name='idStud' hidden>
+            <div class="col-md-4 mb-4 mt-4">
+                <section>
+                    <div class="card mb-4 view-student-card">
+
+                        <div class="card-header bg-white text-center py-3">
+                            <h5 class="mb-0 labels">Profile Picture</h5>
+                        </div>
+
+                        <div class="card-body d-flex justify-content-center">
+                            <img src="{% static 'assets/img/background.png'%}" alt="" style="width: 200px;" id="profile-image-view-student">
+                        </div>
+                    </div>
+                    <div style="height:0px;overflow:hidden">
+                        <input type="file" id="fileInput-view-student" name="fileInput" />
+                        <input type="text" value="F" name="changeFlag" hidden class="changeFlag">
+                     </div>
+                    <button type="button" class="btn btn-block mb-4 upload-profile-pic-student-btn w-75" id="upload-profile-pic-view-student-btn">Upload Photo</button>
+                </section>
+            </div>
+            <div class="col-md-8">
+                <section class="p-4">
+                    <div class="row">
+                        <div class="col-md-8 col-view-student">
+                            <p class="labels mt-2 id-label">Student Id<span class="invalid-username ml-2 d-none" style="padding: 5px;">Id is taken</span><span class="d-none valid-username ml-2" style="padding: 5px;">Id is available</span></p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" name="student_id" value="" id="student_initial_id" hidden>
+                                <input class="form-input form-input-view-student" type="text" name="student_id" value="" id="student_id" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels text-muted mb-0">Name</p>
+                        </div>
+                        <div class="col-md-6 col-view-student">
+                            <p class="labels mt-2">First Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="" name="first_name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="labels mt-2">Middle Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="" name="middle_name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="labels mt-2">Last Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="" name="last_name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels text-muted mb-0">Address</p>
+                        </div>
+                        <div class="col-md-6 col-view-student">
+                            <p class="labels mt-2">Street</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="" name="street_address">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="labels mt-2">Barangay</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="" name="brgy_address" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="labels mt-2">City/Town</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="" name="city_address" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="labels mt-2">Province</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="" name="province_address" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="labels mt-2">Zip</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="" name="zip_address" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="labels mt-2">Country</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" value="" name="country_address" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <label class="labels mt-2">Contact Number</label>
+                            <button onclick="AddContactNumberStudent(this)" class="icon-button ml-2" data-toggle="tooltip" title="Add Contact Number" type="button"><i class="fa fa-plus fa-view-student" ></i></button>
+                        </div>
+                        <div class="col-md-6 mt-2">
+                                <div class="form-item d-flex inputWrapper">
+                                <span class="d-flex align-items-center mr-1">+63</span>
+                                <input class="form-input form-input-view-student" type="text" value="" name="contact_number" pattern="[0-9]{10}" placeholder="9334123456">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-view-student">
+                            <p class="labels mt-5">College</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <select name="college_belong" id="college_belong" class="w-100 select-create-community" required>
+                                    <option value="" selected>All</option>
+                                {%for college in colleges%}
+                                    <option value="{{college.name}}">{{college.name}}</option>
+                                {%endfor%}
+                                </select>
+                            </div>
+                        </div>
+                            <div class="col-md-6 col-view-student">
+                                <p class="labels mt-5">Department</p>
+                                <div class="form-item d-flex align-content-center inputWrapper">
+                                    <select name="department_belong" id="department_belong" class="w-100 select-create-community" required>
+                                    {%for department in departments%}
+                                        <option value="{{department.id}}" {%if department.id == student.department_id%}selected{%endif%}>{{department.name}}</option>
+                                    {%endfor%}
+                                    </select>
+                                </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-sm-12" id="update-button-container-view-student">
+                <button type="submit" class="float-right mr-3" id="updateBtn-view-student" name='btnCreateStudent'>Create</button>
+            </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
@@ -147,9 +355,11 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
-    <script src="communities.js"></script>
-    <script src="addCommunity.js"></script>
-    <script src="students.js"></script>
+    <script src="{%static 'assets/js/communities.js'%}"></script>
+    <script src="{% static 'assets/js/addCommunity.js'%}"></script>
+    <!-- <script src="{% static 'assets/js/viewStudent.js'%}"></script> -->
+    <script src="{% static 'assets/js/students.js'%}"></script>
+    <script src="{% static 'assets/js/sidebar.js'%}"></script>
 </body>
 </html>
 

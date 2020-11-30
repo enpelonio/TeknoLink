@@ -12,18 +12,65 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="{% static 'assets/css/viewStudent.css'%}">
     <script
     src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
     <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="{%static 'assets/css/sidebar.css'%}">
+    <link rel="stylesheet" href="{% static 'assets/css/viewStudent.css'%}">
     <link rel="stylesheet" href="{% static 'assets/css/communities.css'%}">
     <link rel="stylesheet" href="{% static 'assets/css/createCommunity.css'%}">
     <link rel="stylesheet" href="{% static 'assets/css/activities.css'%}">
 </head>
 <body>
-    <!--Colleges Table-->
+<div class="wrapper d-flex align-items-stretch ">
+    <nav id="sidebar" class="" style="height: 100vh;">
+        <div class="custom-menu ">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary ">
+                <i class="fa fa-bars " style="color: white;"></i>
+                <span class="sr-only ">Toggle Menu</span>
+            </button>
+        </div>
+        <div class="p-4 ">
+            <div class="d-flex flex-row align-items-stretch ">
+                <img src="{%static 'assets/img/navlogo.png'%}" alt=" " height="40 " width="40 " style="margin-right: 20px; ">
+                <div>
+                    <h5><b> TeknoLink Administrator</b></h5>
+                </div>
+            </div>
+            <hr>
+            <br>
+            <ul class="list-unstyled components mb-5 ">
+                <li>
+                    <a href="{% url 'Creator:students_view' %}"><span  class="fa fa-graduation-cap mr-3 "></span> Student</a>
+                </li>
+                <li>
+                    <a href="{% url 'Creator:student_posts_view' %}"><span  class="fa fa-clipboard mr-3 "></span> Student Post</a>
+                </li>
+                <li class="active">
+                    <a href="{% url 'Creator:communities_view' %} "><span class="fa fa-sitemap mr-3 " id="yellow"></span> Community</a>
+                </li>
+                <li>
+                    <a href="{% url 'Creator:skill_skill_category_view' %}"><span class="fa fa-level-up mr-3 "></span> Skill/Category</a>
+                </li>
+                <li>
+                    <a href="{% url 'Creator:departments_colleges_view' %} "><span class="fa fa-university mr-3 "></span> College/Department</a>
+                </li>
+                <li>
+                    <a href="#"><span class="fa fa-briefcase mr-3 "></span> Job/Company</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class=" " style="width:100%;">
+        <div class="topbaR">
+            <div>
+                <i class="fa fa-bell-o fa-lg " aria-hidden="true "></i>
+            </div>
+        </div>
+        <div class="parent-container" style="overflow-x: scroll; overflow-y: scroll; height: 100vh;">
+            <!--Colleges Table-->
     <div class="container container-communities">
         <div class="row">
             <div class="col-sm-12 col-md-3 p-0">
@@ -79,21 +126,69 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {%for college in colleges%}
                             <tr>
-                                <td>12-25-2020</td>
-                                <td>College of Computer Studies</td>
-                                <td>S and T Building</td>
+                                <td>{{college.date_created|date:'m-d-Y' }}</td>
+                                <td>{{college.name}}</td>
+                                <td>{{college.location}}</td>
                                 <td><span data-toggle="tooltip" title="Edit"><button type="button" class="column-button edit-button-view-student ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#edit-skill-modal"><i class="fa fa-pencil button-icon-communities"></i></button></span>
+                                    data-toggle="modal" data-target="#edit-{{college.id}}-modal"><i class="fa fa-pencil button-icon-communities"></i></button></span>
                                 </td>
                             </tr>
+                            {%endfor%}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-    <!--Add College Modal-->
+    {%for college in colleges%}
+      <!--Edit College Modal-->
+      <div class="modal fade" id="edit-{{college.id}}-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-content-communities">
+            <div class="modal-header">
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">{{college.name}} Details
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form class="row row-edit-community" method="POST">
+                    {%csrf_token%}
+                        <input type="text" value="{{college.id}}" hidden name="college_id">
+                        <div class="col-sm-12 col-md-6">
+                            <p class="labels">Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input type="text" class="form-input form-input-view-student" value="{{college.name}}" name="college_name">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Description</p>
+                            <div class="form-item inputWrapper">
+                                <textarea class="form-input" name="college_description" rows="6">{{college.description}}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Location</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <i class="fa fa-location-arrow fa-2x mr-3 fa-create-community"></i>
+                                <input class="form-input" type="text" value="{{college.location}}" name="college_location">
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="pageBtn labels float-right" type="submit" name="btnUpdateCollege">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+      <!--Add College Modal-->
     <div class="modal fade" id="add-skill-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
           <div class="modal-content modal-content-communities">
@@ -107,89 +202,30 @@
             <div class="modal-body">
                 <div class="container">
                     <form class="row row-edit-community" method="POST">
+                    {%csrf_token%}
                         <div class="col-sm-12 col-md-6">
                             <p class="labels">Name</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
-                                <input type="text" class="form-input form-input-view-student">
+                                <input type="text" class="form-input form-input-view-student" name="college_name">
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
                             <p class="labels">Description</p>
                             <div class="form-item inputWrapper">
-                                <textarea class="form-input name="community_description" rows="6"></textarea>
+                                <textarea class="form-input" name="college_description" rows="6"></textarea>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6 mt-3">
                             <p class="labels">Location</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
                                 <i class="fa fa-location-arrow fa-2x mr-3 fa-create-community"></i>
-                                <input class="form-input" type="text" value="">
+                                <input class="form-input" type="text" value="" name="college_location">
                             </div>
                         </div>
                         <div class="col-12 mt-3">
-                            <button class="pageBtn labels float-right" type="submit">Add</button>
+                            <button class="pageBtn labels float-right" type="submit" name="btnCreateCollege">Add</button>
                         </div>
                     </form>
-                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                          <div class="modal-content">
-                            <div class="modal-body">
-                                <img src="background.png" alt="" id="image-content-modal">
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--Edit College Modal-->
-      <div class="modal fade" id="edit-skill-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content modal-content-communities">
-            <div class="modal-header">
-                <h5 class="modal-title text-center labels" id="exampleModalLabel">College
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <form class="row row-edit-community" method="POST">
-                        <div class="col-sm-12 col-md-6">
-                            <p class="labels">Name</p>
-                            <div class="form-item d-flex align-content-center inputWrapper">
-                                <input type="text" class="form-input form-input-view-student" value="College of Computer Studies">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <p class="labels">Description</p>
-                            <div class="form-item inputWrapper">
-                                <textarea class="form-input name="community_description" rows="6">ifto8tdygfiasgdietgf8iasuihgdfiudft897eryqiouadyhuaisgfi8dsa</textarea>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6 mt-3">
-                            <p class="labels">Location</p>
-                            <div class="form-item d-flex align-content-center inputWrapper">
-                                <i class="fa fa-location-arrow fa-2x mr-3 fa-create-community"></i>
-                                <input class="form-input" type="text" value="S and T Building">
-                            </div>
-                        </div>
-                        <div class="col-12 mt-3">
-                            <button class="pageBtn labels float-right" type="submit">Update</button>
-                        </div>
-                    </form>
-                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                          <div class="modal-content">
-                            <div class="modal-body">
-                                <img src="background.png" alt="" id="image-content-modal">
-                            </div>
-                          </div>
-                        </div>
-                    </div>
                 </div>
             </div>
           </div>
@@ -199,7 +235,7 @@
     <div class="container container-communities">
         <div class="row">
             <div class="col-sm-12 col-md-3 p-0">
-                <p class="text-center pageTitle p-1">Department</p>
+                <p class="text-center pageTitle p-1">Departments</p>
             </div>
         </div>
         <div class="row justify-content-end">
@@ -214,7 +250,7 @@
         </div>
         <div class="row pl-5 pr-5 mt-2">
             <div class="col-12 mt-3">
-                <span class="communities-text">Filter By Date Acquired</span>
+                <span class="communities-text">Filter By Date Created</span>
             </div>
         </div>
         <div class="row align-content-center pl-5 pr-5">
@@ -242,9 +278,9 @@
                 <label for="" class="ml-2 mr-2">College:</label>
                 <select name="" id="select-type-activities" class="ml-2 mr-2 select-activities">
                     <option value="" selected>All</option>
-                    <option value="College of Computer Studies">College of Computer Studies</option>
-                    <option value="College of Nursing">College of Nursing</option>
-                    <option value="College of Engineering">College of Engineering</option>
+                    {%for college in colleges%}
+                    <option value="{{college.name}}">{{college.name}}</option>
+                    {%endfor%}
                 </select>
             </div>
         </div>
@@ -261,43 +297,72 @@
                             </tr>
                         </thead>
                         <tbody>
+                        {%for department in departments%}
                             <tr>
-                                <td>12-25-2020</td>
-                                <td>Computer Science Department</td>
-                                <td>College of Computer Studies</td>
-                                <td><span data-toggle="tooltip" title="View"><button type="button" class="column-button view-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#view-milestone-modal"><i class="fa fa-eye button-icon-communities"></i></button></span>
-                                    <span data-toggle="tooltip" title="Delete"><button type="button" class="column-button delete-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#delete-milestone-modal"> <i class="fa fa-trash button-icon-communities"></i></button></span>
+                                <td>{{department.date_created|date:'m-d-Y' }}</td>
+                                <td>{{department.name}}</td>
+                                <td>{{department.college_id.name}}</td>
+                                <td><span data-toggle="tooltip" title="Edit"><button type="button" class="column-button edit-button-view-student ml-1 mr-1 mt-1" id="" 
+                                    data-toggle="modal" data-target="#department-{{department.id}}-edit-modal"><i class="fa fa-pencil button-icon-communities"></i></button></span>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>12-25-2020</td>
-                                <td>Civil Engineering Department</td>
-                                <td>College of Engineering</td>
-                                <td><span data-toggle="tooltip" title="View"><button type="button" class="column-button view-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#view-milestone-modal"><i class="fa fa-eye button-icon-communities"></i></button></span>
-                                    <span data-toggle="tooltip" title="Delete"><button type="button" class="column-button delete-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#delete-milestone-modal"> <i class="fa fa-trash button-icon-communities"></i></button></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>12-25-2020</td>
-                                <td>Nursing</td>
-                                <td>College of Nursing</td>
-                                <td><span data-toggle="tooltip" title="View"><button type="button" class="column-button view-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#view-milestone-modal"><i class="fa fa-eye button-icon-communities"></i></button></span>
-                                    <span data-toggle="tooltip" title="Delete"><button type="button" class="column-button delete-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#delete-milestone-modal"> <i class="fa fa-trash button-icon-communities"></i></button></span>
-                                </td>
-                            </tr>
+                        {%endfor%}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-    <!--Add Department Modal-->
+    {%for department in departments%}
+      <!--View Department Modal-->
+      <div class="modal fade" id="department-{{department.id}}-edit-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-content-communities">
+            <div class="modal-header">
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">{{department.name}} Details
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form class="row row-edit-community" method="POST">
+                    {%csrf_token%}
+                    <input type="text" value="{{department.id}}" name="department_id" hidden>
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Department Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" type="text" name="department_name" value="{{department.name}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">College</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <select name="college_id" id="" class="w-100 select-create-community">
+                                    {%for college in colleges%}
+                                    <option value="{{college.id}}" {%if college.name == department.college_id.name%} selected {%endif%}>{{college.name}}</option>
+                                    {%endfor%}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Description</p>
+                            <div class="form-item inputWrapper">
+                                <textarea class="form-input" name="department_description" rows="6">{{department.description}}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="pageBtn labels float-right" type="submit" name="btnUpdateDepartment">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+      <!--Add Department Modal-->
     <div class="modal fade" id="add-milestone-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
           <div class="modal-content modal-content-communities">
@@ -309,139 +374,56 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form class="container">
-                    <div class="row row-edit-community mt-4" method="POST">
+                <div class="container">
+                    <form class="row row-edit-community mt-4" method="POST">
+                    {%csrf_token%}
                         <div class="col-sm-12 col-md-6 mt-3">
-                            <p class="labels">Milestone Name</p>
+                            <p class="labels">Department Name</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
-                                <input class="form-input form-input-view-student" type="text" value="">
+                                <input class="form-input form-input-view-student" type="text" value="" name="department_name">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6 mt-3">
                             <p class="labels">College</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
-                                <select name="community_type" id="" class="w-100 select-create-community">
-                                    <option value="Award">College of Engineering</option>
-                                    <option value="Certificate">College of Nursing</option>
-                                    <option value="Badge" selected>College of Computer Studies</option>
+                                <select name="college_id" id="" class="w-100 select-create-community">
+                                    {%for college in colleges%}
+                                    <option value="{{college.id}}">{{college.name}}</option>
+                                    {%endfor%}
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
                             <p class="labels">Description</p>
                             <div class="form-item inputWrapper">
-                                <textarea class="form-input name="community_description" rows="6"></textarea>
+                                <textarea class="form-input" name="department_description" rows="6"></textarea>
                             </div>
                         </div>
                         <div class="col-12 mt-3">
-                            <button class="pageBtn labels float-right" type="submit">Add</button>
+                            <button class="pageBtn labels float-right" type="submit" name="btnCreateDepartment">Add</button>
                         </div>
-                    </div>
-                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                          <div class="modal-content">
-                            <div class="modal-body">
-                                <img src="background.png" alt="" id="image-content-modal">
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
           </div>
         </div>
       </div>
-      <!--View Department Modal-->
-      <div class="modal fade" id="view-milestone-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content modal-content-communities">
-            <div class="modal-header">
-                <h5 class="modal-title text-center labels" id="exampleModalLabel">Add Milestone
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form class="container">
-                    <div class="row row-edit-community mt-4" method="POST">
-                        <div class="col-sm-12 col-md-6 mt-3">
-                            <p class="labels">Milestone Name</p>
-                            <div class="form-item d-flex align-content-center inputWrapper">
-                                <input class="form-input form-input-view-student" type="text" value="Computer Science Department">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6 mt-3">
-                            <p class="labels">College</p>
-                            <div class="form-item d-flex align-content-center inputWrapper">
-                                <select name="community_type" id="" class="w-100 select-create-community">
-                                    <option value="Award">College of Engineering</option>
-                                    <option value="Certificate">College of Nursing</option>
-                                    <option value="Badge" selected>College of Computer Studies</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <p class="labels">Description</p>
-                            <div class="form-item inputWrapper">
-                                <textarea class="form-input name="community_description" rows="6">adfggfhgdhgjhjdfgf</textarea>
-                            </div>
-                        </div>
-                        <div class="col-12 mt-3">
-                            <button class="pageBtn labels float-right" type="submit">Update</button>
-                        </div>
-                    </div>
-                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                          <div class="modal-content">
-                            <div class="modal-body">
-                                <img src="background.png" alt="" id="image-content-modal">
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-          </div>
         </div>
       </div>
-      <!--Delete Department Modal-->
-      <div class="modal fade" id="delete-milestone-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-        <h5 class="modal-title labels" id="exampleModalLabel">Are you sure you want to delete this milestone?</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <form action="" method="POST">
-        <input type="text" name="cIdNum" value="{{customer.id}}" hidden>
-    <div class="modal-body">
-        <p class="">Deletion may not be successful if there are still entities that relate with the department. For this reason, we advise that edition of details is more preferrable than complete deletion</p>
-        <input type="checkbox" name="" class="mt-0 ml-2 mb-0 mr-3 inputWrapper is-admin-checkbox understand-checkbox">
-        <label for=""> Continue delete</label>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn pageBtn" data-dismiss="modal" style="width: fit-content;">NO</button>
-        <button type="submit" class="btn btn-primary" id="btnDelete" name="btnDelete" disabled>YES</button>
-    </div>
-</form>
-</div>
-</div>
-</div>
+      </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.10.21/dataRender/ellipsis.js"></script>
     <script src="{%static 'assets/js/addCommunity.js'%}"></script>
     <script src="{%static 'assets/js/viewStudent.js'%}"></script>
     <script src="{% static 'assets/js/departments-colleges.js'%}"></script>
+    <script src="{% static 'assets/js/sidebar.js'%}"></script>
 </body>
 </html>
 

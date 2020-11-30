@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Posts</title>
+    {%load static%}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://use.fontawesome.com/43bd965db5.js"></script>
@@ -11,20 +12,67 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="viewStudent.css">
     <script
     src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
     <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
-    <link rel="stylesheet" href="communities.css">
-    <link rel="stylesheet" href="createCommunity.css">
-    <link rel="stylesheet" href="activities.css">
-    <link rel="stylesheet" href="student_posts.css">
+    <link rel="stylesheet" href="{%static 'assets/css/sidebar.css'%}">
+    <link rel="stylesheet" href="{% static 'assets/css/viewStudent.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/communities.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/createCommunity.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/activities.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/student_posts.css'%}">
 </head>
 <body>
+<div class="wrapper d-flex align-items-stretch ">
+    <nav id="sidebar" class="" style="height: 100vh;">
+        <div class="custom-menu ">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary ">
+                <i class="fa fa-bars " style="color: white;"></i>
+                <span class="sr-only ">Toggle Menu</span>
+            </button>
+        </div>
+        <div class="p-4 ">
+            <div class="d-flex flex-row align-items-stretch ">
+                <img src="{%static 'assets/img/navlogo.png'%}" alt=" " height="40 " width="40 " style="margin-right: 20px; ">
+                <div>
+                    <h5><b> TeknoLink Administrator</b></h5>
+                </div>
+            </div>
+            <hr>
+            <br>
+            <ul class="list-unstyled components mb-5 ">
+                <li>
+                    <a href="{% url 'Creator:students_view' %}"><span  class="fa fa-graduation-cap mr-3 "></span> Student</a>
+                </li>
+                <li class="active">
+                    <a href="{% url 'Creator:student_posts_view' %}"><span  class="fa fa-clipboard mr-3 " id="yellow"></span> Student Post</a>
+                </li>
+                <li>
+                    <a href="{% url 'Creator:communities_view' %} "><span class="fa fa-sitemap mr-3 "></span> Community</a>
+                </li>
+                <li>
+                    <a href="{% url 'Creator:skill_skill_category_view' %}"><span class="fa fa-level-up mr-3 "></span> Skill/Category</a>
+                </li>
+                <li>
+                    <a href="{% url 'Creator:departments_colleges_view' %} "><span class="fa fa-university mr-3 "></span> College/Department</a>
+                </li>
+                <li>
+                    <a href="#"><span class="fa fa-briefcase mr-3 "></span> Job/Company</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class=" " style="width:100%; ">
+        <div class="topbaR">
+            <div>
+                <i class="fa fa-bell-o fa-lg " aria-hidden="true "></i>
+            </div>
+        </div>
+        <div style="overflow-y: scroll; height: 100vh;">
     <!--Student Posts Table-->
-    <div class="container container-communities">
+    <div class="container container-communities mb-5">
         <div class="row">
             <div class="col-sm-12 col-md-3 p-0">
                 <p class="text-center pageTitle p-1">Student Posts</p>
@@ -65,9 +113,9 @@
                 <label for="" class="ml-2 mr-2">Category:</label>
                 <select name="" id="select-type-activities" class="ml-2 mr-2 select-activities">
                     <option value="" selected>All</option>
-                    <option value="Help">Help</option>
-                    <option value="Survey">Survey</option>
-                    <option value="General Information">General Information</option>
+                    {%for type in post_types%}
+                    <option value="{{type.name}}">{{type.name}}</option>
+                    {%endfor%}         
                 </select>
             </div>
         </div>
@@ -86,54 +134,33 @@
                             </tr>
                         </thead>
                         <tbody>
+                        {%for post in posts%}
                             <tr>
-                                <td>12-25-2020</td>
-                                <td>18-0457-497</td>
-                                <td>Help</td>
-                                <td>0</td>
-                                <td>973217934798349783498712313431245422314134</td>
+                                <td>{{post.date_created}}</td>
+                                <td>{{post.creator_student_id.student_id_editable}}</td>
+                                <td>{{post.post_type.name}}</td>
+                                <td>{{post.getAssociatedReports.count}}</td>
+                                <td>{{post.name}}</td>
                                 <td><span data-toggle="tooltip" title="View"><button type="button" class="column-button view-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#view-milestone-modal"><i class="fa fa-eye button-icon-communities"></i></button></span>
+                                    data-toggle="modal" data-target="#view-post{{post.id}}-modal"><i class="fa fa-eye button-icon-communities"></i></button></span>
                                     <span data-toggle="tooltip" title="Delete"><button type="button" class="column-button delete-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#delete-milestone-modal"> <i class="fa fa-trash button-icon-communities"></i></button></span>
+                                    data-toggle="modal" data-target="#delete-post{{post.id}}-modal"> <i class="fa fa-trash button-icon-communities"></i></button></span>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>12-25-2020</td>
-                                <td>18-0457-497</td>
-                                <td>Survey</td>
-                                <td>0</td>
-                                <td>Please help me by filling in this survey</td>
-                                <td><span data-toggle="tooltip" title="View"><button type="button" class="column-button view-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#view-milestone-modal"><i class="fa fa-eye button-icon-communities"></i></button></span>
-                                    <span data-toggle="tooltip" title="Delete"><button type="button" class="column-button delete-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#delete-milestone-modal"> <i class="fa fa-trash button-icon-communities"></i></button></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>12-25-2020</td>
-                                <td>18-0457-497</td>
-                                <td>General Information</td>
-                                <td>0</td>
-                                <td>Do you know that sdfhdfjghikghkj?</td>
-                                <td><span data-toggle="tooltip" title="View"><button type="button" class="column-button view-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#view-milestone-modal"><i class="fa fa-eye button-icon-communities"></i></button></span>
-                                    <span data-toggle="tooltip" title="Delete"><button type="button" class="column-button delete-button ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#delete-milestone-modal"> <i class="fa fa-trash button-icon-communities"></i></button></span>
-                                </td>
-                            </tr>
+                        {%endfor%}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+    {%for post in posts%}
       <!--View Post Modal-->
-      <div class="modal fade" id="view-milestone-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal fade" id="view-post{{post.id}}-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
           <div class="modal-content modal-content-communities">
             <div class="modal-header">
-                <h5 class="modal-title text-center labels" id="exampleModalLabel">Student Post
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">Student Post {{post.id}}
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -143,30 +170,34 @@
                 <form class="container">
                     <div class="row row-edit-community mt-4" method="POST">
                         <div class="col-sm-12">
-                            <img src="background.png" alt="" class="image-background image-background-student-posts">
+                            {%if post.image.url is not null%}
+                            <img src="{{image.post.url}}" alt="" class="image-background image-background-student-posts">
+                            {%else%}
+                            <img src="{%static 'assets/img/background.png'%}" alt="" class="image-background image-background-student-posts">
+                            {%endif%}
                         </div>
                         <div class="col-sm-12 col-md-6 mt-3">
                             <p class="labels">Creator Id</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
-                                <input class="form-input form-input-view-student" type="text" value="17463710243" disabled>
+                                <input class="form-input form-input-view-student" type="text" value="{{post.creator_student_id.student_id_editable}}" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6 mt-3">
                             <p class="labels">Post Type</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
-                                <input class="form-input form-input-view-student" type="text" value="Help" disabled>
+                                <input class="form-input form-input-view-student" type="text" value="{{post.post_type.name}}" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
                             <p class="labels">Topic</p>
                             <div class="form-item inputWrapper">
-                                <textarea class="form-input name="community_description" rows="6" disabled>adfggfhgdhgjhjdfgafdafdgf</textarea>
+                                <textarea class="form-input" name="community_description" rows="6" disabled>{{post.name}}</textarea>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
                             <p class="labels">Description</p>
                             <div class="form-item inputWrapper">
-                                <textarea class="form-input name="community_description" rows="6" disabled>aasdfdafgsfgfhghhgskdjhkasdkgf</textarea>
+                                <textarea class="form-input" name="community_description" rows="6" disabled>{{post.description}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -175,33 +206,32 @@
                             <p class="text-center pageTitle p-1" style="font-size: 16px;">Reports</p>
                         </div>
                     </div>
+                    {%for report in post.getAssociatedReports%}
                     <div class="row row-edit-community view-reports pt-1 pb-1">
                         <div class="col col-md-4 d-flex justify-content-center flex-column pt-3">
-                            <img src="background.png" alt="" class="reporter-profile">
-                            <p class="text-center mt-2">Ervin Niño Pelonio</p>
+                            {%if post.creator_student_id.profile_picture.url is not null%}
+                            <img src="{{post.creator_student_id.profile_picture.url}}" alt="" class="reporter-profile">
+                            {%else%}
+                            <img src="{%static 'assets/img/background.png'%}" alt="" class="reporter-profile">
+                            {%endif%}
+                            <p class="text-center mt-2">{{post.creator_student_id.first_name}} {{post.creator_student_id.middle_name.0}}. {{post.creator_student_id.last_name}}</p>
                         </div>
                         <div class="col col-md-8 pt-3">
-                            <p class="m-0">12-25-2020</p>
-                            <p class="report-data m-0">Salacious content, irrelevant content</p>
-                            <p class="m-0">I am offended by the content of this post. It should not be be permitted.</p>
+                            <p class="m-0">{{report.date_created}}</p>
+                            <p class="report-data m-0">{{report.report_type_id.name}}</p>
+                            <p class="m-0">{{report.description}}</p>
                         </div>
                     </div>
-                    <div class="row row-edit-community view-reports pt-1 pb-2">
-                        <div class="col col-md-4 d-flex justify-content-center flex-column pt-3">
-                            <img src="background.png" alt="" class="reporter-profile">
-                            <p class="text-center mt-2">Ervin Niño Pelonio</p>
-                        </div>
-                        <div class="col col-md-8 pt-3">
-                            <p class="m-0">12-25-2020</p>
-                            <p class="report-data m-0">Salacious content, irrelevant content</p>
-                            <p class="m-0">I am offended by the content of this post. It should not be be permitted.</p>
-                        </div>
-                    </div>
+                    {%endfor%} 
                     <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                           <div class="modal-content">
                             <div class="modal-body">
-                                <img src="background.png" alt="" id="image-content-modal">
+                                {%if post.image.url is not null%}
+                            <img src="{{image.post.url}}" alt="" class="image-background image-background-student-posts">
+                            {%else%}
+                            <img src="{%static 'assets/img/background.png'%}" alt="" class="image-background image-background-student-posts">
+                            {%endif%}
                             </div>
                           </div>
                         </div>
@@ -212,7 +242,7 @@
         </div>
       </div>
       <!--Delete Post Modal-->
-      <div class="modal fade" id="delete-milestone-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+      <div class="modal fade" id="delete-post{{post.id}}-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -222,7 +252,8 @@
         </button>
     </div>
     <form action="" method="POST">
-        <input type="text" name="cIdNum" value="{{customer.id}}" hidden>
+    {% csrf_token %}
+        <input type="text" name="post_id" value="{{post.id}}" hidden>
     <div class="modal-body">
         <input type="checkbox" name="" class="mt-0 ml-2 mb-0 mr-3 inputWrapper is-admin-checkbox understand-checkbox">
         <label for=""> I understand that deleted content can no longer be recovered.</label>
@@ -235,6 +266,10 @@
 </div>
 </div>
 </div>
+{%endfor%}
+</div>
+</div>
+</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
@@ -244,9 +279,10 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.10.21/dataRender/ellipsis.js"></script>
-    <script src="addCommunity.js"></script>
-    <script src="student_posts.js"></script>
-    <script src="departments-colleges.js"></script>
+    <script src="{%static 'assets/js/addCommunity.js'%}"></script>
+    <script src="{%static 'assets/js/student_posts.js'%}"></script>
+    <script src="{%static 'assets/js/departments-colleges.js'%}"></script>
+    <script src="{% static 'assets/js/sidebar.js'%}"></script>
 </body>
 </html>
 
