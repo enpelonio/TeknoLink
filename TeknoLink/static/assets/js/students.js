@@ -1,3 +1,14 @@
+function AddContactNumberStudent(element){
+  var currentDiv=$(element).parent().parent();
+  var newContactNumber='<div class="col-md-6 mt-2">'+
+  '<div class="form-item d-flex inputWrapper">'+
+  '<span class="d-flex align-items-center mr-1">+63</span>'+
+  '<input class="form-input form-input-view-student" type="text" value="" name="contact_number" pattern="[0-9]{10}" placeholder="9334123456">'+
+  '<button onclick="RemoveContactNumber(this)" class="icon-button ml-2" data-toggle="tooltip" title="Remove Contact Number" type="button"><i class="fa fa-times remove-icon fa-view-student" ></i></button>'+
+'</div>'+
+'</div>';
+  $(currentDiv).append(newContactNumber);
+}
 $(document).ready(function() {
     var table=$('#community-table').DataTable();
     $('#select-type-activities-student').on("change",function(){
@@ -27,6 +38,21 @@ $(document).ready(function() {
             }
           });
     });
+    $("#upload-profile-pic-view-student-btn").on("click",function() {
+      $('#fileInput-view-student').click();
+    });
+    $("#fileInput-view-student").on("change",function(){readURL(this)});
+    function readURL(input){
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $("#profile-image-view-student")
+            .attr('src', e.target.result);
+            $(input).parent().find(".changeFlag").val("T");
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
     $('#college_belong').on('change',function(){
       var selectedCollege=this.value;
       $.ajax({

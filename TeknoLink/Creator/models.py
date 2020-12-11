@@ -36,6 +36,11 @@ class Community(User):
     image_cover=models.ImageField(null=True,blank=True)
     isDeleted=models.BooleanField(default=False)
     delete_admin_id=models.ForeignKey('self',null=True,blank=True,on_delete=models.CASCADE,related_name='delete_admin_id_set')
+
+    def getCreatedCommunities(self):
+        return Community.objects.filter(create_admin_id=self.user_id)
+    def getCreatedActivities(self):
+        return Activity.objects.filter(creator_community_id=self.user_id,parent_activity_id=None)
     class Meta:
         db_table='Community'
 
@@ -147,6 +152,9 @@ class Activity_Status(models.Model):
         db_table="Activity_Status"
 
 class Activity(models.Model):
+    picture=models.ImageField(null=True,blank=True)
+    extendToOtherCommunities=models.BooleanField(default=False)
+    date_created=models.DateField(default=date_now)
     title=models.CharField(max_length=100,null=False,blank=False)
     description=models.TextField(null=True,blank=True)
     status_id=models.ForeignKey(Activity_Status,null=False,blank=False,on_delete=models.CASCADE)
@@ -154,9 +162,17 @@ class Activity(models.Model):
     parent_activity_id=models.ForeignKey('self',null=True,blank=True,on_delete=models.CASCADE)
     status_admin_id=models.ForeignKey(Community,null=True,blank=True,on_delete=models.CASCADE,related_name='activity_status_admin')
     creator_community_id=models.ForeignKey(Community,null=False, blank=False, on_delete=models.CASCADE,related_name='activity_creator_id')
-    chat_room_id=models.ForeignKey(Chat_Room,null=False,blank=False,on_delete=models.CASCADE)
+    chat_room_id=models.ForeignKey(Chat_Room,null=False,blank=False,on_delete=models.RESTRICT)
     activity_type=models.CharField(default='Announcement', max_length=50)
+    rejection_message=models.TextField(null=True,blank=True)
 
+    def getTargetDepartments(self):
+        return Activity_Target_Department.objects.filter(activity=self.id)
+    def getSteps(self):
+        return Activity.objects.filter(parent_activity_id=self.id)
+    def getCorrespondingEvent(self):
+        return Event.objects.get(id=self.id)
+        
     class Meta:
         db_table='Activity'
 
@@ -166,6 +182,13 @@ class Schedule_Type(models.Model):
     class Meta:
         db_table='Schedule_Type'
 
+class Activity_Target_Department(models.Model):
+    activity=models.ForeignKey(Activity,null=False,blank=False,on_delete=models.CASCADE)
+    department=models.ForeignKey(Department,null=False,blank=False,on_delete=models.CASCADE)
+
+    class Meta:
+        db_table='Activity_Target_Department'
+
 class Event(Activity):
     start_date=models.DateField(default=date_now)
     end_date=models.DateField(null=True,blank=True)
@@ -173,19 +196,42 @@ class Event(Activity):
     end_time=models.TimeField(null=True,blank=True)
     is_recurring=models.BooleanField(default=False)
 
+    def getSchedule(self):
+        return Event_Schedule_Pattern.objects.get(event_id=self.id)
+    def getSkillsTrained(self):
+        return Event_Train_Skill.objects.filter(event_id=self.id)
+
     class Meta:
         db_table='Event'
 
 class Event_Schedule_Pattern(models.Model):
     event_id=models.ForeignKey(Event, on_delete=models.CASCADE)
     schedule_type_id=models.ForeignKey(Schedule_Type, on_delete=models.CASCADE)
-    onMonday=models.BooleanField()
-    onTuesday=models.BooleanField()
-    onWednesDay=models.BooleanField()
-    onThursday=models.BooleanField()
-    onFriday=models.BooleanField()
-    onSaturday=models.BooleanField()
-    onSunday=models.BooleanField()
+    onMonday=models.BooleanField(default=False)
+    onTuesday=models.BooleanField(default=False)
+    onWednesday=models.BooleanField(default=False)
+    onThursday=models.BooleanField(default=False)
+    onFriday=models.BooleanField(default=False)
+    onSaturday=models.BooleanField(default=False)
+    onSunday=models.BooleanField(default=False)
+
+    def getDays(self):
+        string=""
+        if self.onMonday:
+            string+="Monday, "
+        if self.onTuesday:
+            string+="Tuesday, "
+        if self.onWednesday:
+            string+="Wednesday, "
+        if self.onThursday:
+            string+="Thursday, "
+        if self.onFriday:
+            string+="Friday, "
+        if self.onSaturday:
+            string+="Saturday, "
+        if self.onSunday:
+            string+="Sunday"
+        return string
 
     class Meta:
        db_table='Event_Schedule_Pattern'
@@ -304,9 +350,12 @@ class Milestone(models.Model):
         db_table='Milestone'
 
 class Job(models.Model):
+    date_created=models.DateField(default=date_now)
     name=models.CharField(max_length=50,blank=True,default='')
-    description=models.TextField()
+    description=models.TextField(null=True,blank=True)
 
+    def getAssociatedSkills(self):
+        return Job_Require_Skill.objects.filter(job_id=self.id)
     class Meta:
         db_table='Job'
 
@@ -327,9 +376,15 @@ class Job_Person(models.Model):
         db_table='Job_Person'
 
 class Company(models.Model):
+    date_created=models.DateField(default=date_now)
     name=models.CharField(max_length=100,default='',blank=True)
     description=models.TextField()
+    picture=models.ImageField(null=True,blank=True)
 
+    def getAssociatedJobs(self):
+        return Company_Demand_Job.objects.filter(company_id=self.id)
+    def getAssociatedSkills(self):
+        return Company_Want_Skill.objects.filter(company_id=self.id)
     class Meta:
         db_table='Company'
 
@@ -386,6 +441,8 @@ class Student_Possess_Skill(models.Model):
     points_in_level=models.IntegerField()
     date_acquired=models.DateField(default=date_now)
 
+    def getPointsToNextLevel(self):
+        return self.level*100
     def getMaxSkillPoint(self):
         return self.level*100-1
     class Meta:

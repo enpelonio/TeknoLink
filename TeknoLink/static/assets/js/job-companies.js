@@ -51,7 +51,6 @@ $(document).ready(function(){
         reader.readAsDataURL(input.files[0]);
       }
     }
-    $('body').removeClass('modal-open');
 
     var skillsTable= $('#skill-table').DataTable({
         dom: 'lBfrtip',
@@ -132,75 +131,69 @@ $(document).ready(function(){
 
     //autocomplete
 
-    var availableSkills = [
-        "ActionScript",
-        "AppleScript",
-        "Asp",
-        "BASIC",
-        "C",
-        "C++",
-        "Clojure",
-        "COBOL",
-        "ColdFusion",
-        "Erlang",
-        "Fortran",
-        "Groovy",
-        "Haskell",
-        "Java",
-        "JavaScript",
-        "Lisp",
-        "Perl",
-        "PHP",
-        "Python",
-        "Ruby",
-        "Scala",
-        "Scheme"
-      ];
-      var availableJobs=[
-          "Job1",
-          "Job2",
-          "Job3",
-          "Job4",
-          "Job5",
-          "Job6"
-      ]
-      $(".add-skill-txb").autocomplete({
-        source:availableSkills,
-        appendTo: $(".add-skill-txb").parent().parent().parent()
+    var skillIds;
+    var skillNames;
+    var jobIds;
+    var jobNames;
+    $.ajax({
+        url: '/Creator/get-all-skills/',
+        success: function (data) {
+          skillIds=data.skillIds;
+          skillNames=data.skillNames;
+          $(".add-skill-txb").autocomplete({
+            source:skillNames,
+            autoFocus:true
+          });
+        },
+        failure: function(data) { 
+            alert('Got an error dude');
+        }
+      });
+      $.ajax({
+        url: '/Creator/get-all-jobs/',
+        success: function (data) {
+          jobIds=data.jobIds;
+          jobNames=data.jobNames;
+          console.log(jobNames);
+          $(".add-job-txb").autocomplete({
+            source:jobNames,
+            autoFocus:true
+          });
+    
+        },
+        failure: function(data) { 
+            alert('Got an error dude');
+        }
       });
       $(".addSkillBtn").click(function(){
             var skill=$(this).parent().find(".add-skill-txb").val();
-            if(availableSkills.findIndex(item => skill.toLowerCase() === item.toLowerCase())==-1){
+            var skillIndex=skillNames.findIndex(item => skill.toLowerCase() === item.toLowerCase());
+            if(skillIndex==-1){
                 $("#skill-not-found-modal").modal('show');
             }
             else{
                 var tagContainer=$(this).parent().parent().parent().find(".tag-container-job-companies-skill");
-                console.log(tagContainer);
-                var addedSkill='<div class="tag-item form-item inputWrapper ml-1 mr-1"><span class="mr-2 ml-2">'+
-                    skill+'</span><button onclick="RemoveSkillTag(this)" data-toggle="tooltip"'+
+                var addedSkill='<div class="tag-item form-item inputWrapper ml-2 mr-2 p-2 mt-2 mb-2 d-inline-block"><span class="mr-2 ml-2">'+
+                    skillNames[skillIndex]+'</span><input type="text" value="'+skillIds[skillIndex] +'" name="job_skill" hidden><button onclick="RemoveSkillTag(this)" data-toggle="tooltip"'+
                     'title="Remove Skill"><i class="fa fa-times"></i></button></div>';
                 tagContainer.append(addedSkill);
-                $(this).val("");
+                $(this).parent().find('.add-skill-txb').val("");
             }
       });
-      $(".add-job-txb").autocomplete({
-        source:availableJobs,
-        appendTo: $(".add-job-txb").parent().parent().parent()
-      });
-
       $(".addJobBtn").click(function(){
         var job=$(this).parent().find(".add-job-txb").val();
-        if(availableJobs.findIndex(item => job.toLowerCase() === job.toLowerCase())==-1){
+        var jobIndex=jobNames.findIndex(item => job.toLowerCase() === item.toLowerCase());
+        if(jobIndex==-1){
             $("#job-not-found-modal").modal('show');
         }
         else{
             var tagContainer=$(this).parent().parent().parent().find(".tag-container-job-companies-job");
-            console.log(tagContainer);
-            var addedSkill='<div class="tag-item form-item inputWrapper ml-1 mr-1"><span class="mr-2 ml-2">'+
-                job+'</span><button onclick="RemoveSkillTag(this)" data-toggle="tooltip"'+
+            console.log(jobIndex);
+            var addedSkill='<div class="tag-item form-item inputWrapper ml-1 mr-1 p-2 mt-2 mb-2 d-inline-block"><span class="mr-2 ml-2">'+
+                jobNames[jobIndex]+'</span><input type="text" value="'+jobIds[jobIndex] +'" name="company_job" hidden><button onclick="RemoveSkillTag(this)" data-toggle="tooltip"'+
                 'title="Remove Skill"><i class="fa fa-times"></i></button></div>';
             tagContainer.append(addedSkill);
-            $(this).val("");
+            $(this).parent().find('.add-job-txb').val("");
         }
   });
 });

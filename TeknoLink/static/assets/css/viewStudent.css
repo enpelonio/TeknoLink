@@ -68,3 +68,6 @@
 .form-input-view-student:disabled{
     background-color: white;
 }
+body.modal-open {
+    overflow: hidden;
+}

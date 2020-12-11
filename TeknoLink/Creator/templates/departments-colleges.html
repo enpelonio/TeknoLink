@@ -48,17 +48,17 @@
                 <li>
                     <a href="{% url 'Creator:student_posts_view' %}"><span  class="fa fa-clipboard mr-3 "></span> Student Post</a>
                 </li>
-                <li class="active">
-                    <a href="{% url 'Creator:communities_view' %} "><span class="fa fa-sitemap mr-3 " id="yellow"></span> Community</a>
+                <li>
+                    <a href="{% url 'Creator:communities_view' %} "><span class="fa fa-sitemap mr-3 "></span> Community</a>
                 </li>
                 <li>
                     <a href="{% url 'Creator:skill_skill_category_view' %}"><span class="fa fa-level-up mr-3 "></span> Skill/Category</a>
                 </li>
-                <li>
-                    <a href="{% url 'Creator:departments_colleges_view' %} "><span class="fa fa-university mr-3 "></span> College/Department</a>
+                <li  class="active">
+                    <a href="{% url 'Creator:departments_colleges_view' %} "><span class="fa fa-university mr-3 " id="yellow"></span> College/Department</a>
                 </li>
                 <li>
-                    <a href="#"><span class="fa fa-briefcase mr-3 "></span> Job/Company</a>
+                    <a href="{% url 'Creator:jobs_companies_view' %}"><span class="fa fa-briefcase mr-3 "></span> Job/Company</a>
                 </li>
             </ul>
         </div>
@@ -232,7 +232,7 @@
         </div>
       </div>
     <!--Department Table-->
-    <div class="container container-communities">
+    <div class="container container-communities mb-5">
         <div class="row">
             <div class="col-sm-12 col-md-3 p-0">
                 <p class="text-center pageTitle p-1">Departments</p>

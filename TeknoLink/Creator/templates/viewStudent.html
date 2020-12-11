@@ -42,11 +42,11 @@
             <hr>
             <br>
             <ul class="list-unstyled components mb-5 ">
-                <li>
-                    <a href="{% url 'Creator:students_view' %}"><span  class="fa fa-graduation-cap mr-3 "></span> Student</a>
-                </li>
                 <li class="active">
-                    <a href="{% url 'Creator:student_posts_view' %}"><span  class="fa fa-clipboard mr-3 " id="yellow"></span> Student Post</a>
+                    <a href="{% url 'Creator:students_view' %}"><span  class="fa fa-graduation-cap mr-3 " id="yellow"></span> Student</a>
+                </li>
+                <li >
+                    <a href="{% url 'Creator:student_posts_view' %}"><span  class="fa fa-clipboard mr-3 "></span> Student Post</a>
                 </li>
                 <li>
                     <a href="{% url 'Creator:communities_view' %} "><span class="fa fa-sitemap mr-3 "></span> Community</a>
@@ -58,7 +58,7 @@
                     <a href="{% url 'Creator:departments_colleges_view' %} "><span class="fa fa-university mr-3 "></span> College/Department</a>
                 </li>
                 <li>
-                    <a href="#"><span class="fa fa-briefcase mr-3 "></span> Job/Company</a>
+                    <a href="{% url 'Creator:jobs_companies_view' %}"><span class="fa fa-briefcase mr-3 "></span> Job/Company</a>
                 </li>
             </ul>
         </div>
@@ -305,7 +305,7 @@
                                 <td>{{skill.skill_id.name}}</td>
                                 <td>{{skill.level}}</td>
                                 <td>{{skill.points_in_level}}</td>
-                                <td>{{skill.points_to_next_level}}</td>
+                                <td>{{skill.getPointsToNextLevel}}</td>
                                 <td><span data-toggle="tooltip" title="Edit"><button type="button" class="column-button edit-button-view-student ml-1 mr-1 mt-1" id="" 
                                     data-toggle="modal" data-target="#edit-skill{{skill.id}}-modal"><i class="fa fa-pencil button-icon-communities"></i></button></span>
                                     <span data-toggle="tooltip" title="Delete"><button type="button" class="column-button delete-button ml-1 mr-1 mt-1" id="" 
@@ -553,6 +553,7 @@
             <div class="modal-body">
                 <form class="container" method="POST" enctype="multipart/form-data">
                     {%csrf_token%}
+                    <input type="text" value="{{student.user_id}}" name="student_id" hidden>
                     <input type="text" value="{{milestone.id}}" name="milestone_id" hidden>
                     <div class="row justify-content-center row-edit-community">
                         <div class="col-md-10 col-sm-9">
@@ -629,6 +630,7 @@
     </div>
     <form action="" method="POST">
         {%csrf_token%}
+        <input type="text" name="student_id" value="{{student.user_id}}" hidden>
         <input type="text" name="milestone_id" value="{{milestone.id}}" hidden>
     <div class="modal-body">
         <input type="checkbox" name="" class="mt-0 ml-2 mb-0 mr-3 inputWrapper is-admin-checkbox understand-checkbox">
@@ -661,7 +663,7 @@
                 <div class="row justify-content-center row-edit-community">
                     <div class="col-md-10 col-sm-9">
                         <img src="{%static 'assets/img/background.png'%}" alt="" class="image-background">
-                        <input type="file" class="fileInput" hidden>
+                        <input type="file" class="fileInput" name='fileInput' hidden>
                         <button class="uploadPhotoBtn pageBtn labels" type="button">Upload Photo</button>
                     </div>
                 </div>

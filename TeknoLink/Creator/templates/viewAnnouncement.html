@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Create Announcement</title>
+    {%load static%}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{%static 'assets/css/style.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/activities.css'%}">
+</head>
+
+<body>
+    <div class="wrapper d-flex align-items-stretch ">
+        <nav id="sidebar" class="">
+            <div class="custom-menu ">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary ">
+	          <i class="fa fa-bars " style="color:white;"></i>
+	          <span class="sr-only ">Toggle Menu</span>
+	        </button>
+            </div>
+            <div class="p-4 ">
+                <div class="d-flex flex-row align-items-stretch ">
+                    <img src="image/navlogo.png " alt=" " height="40 " width="40 " style="margin-right: 20px; ">
+                    <div>
+                        <h5><a href="index.html " class="logo "><b> TeknoLink</b></a> </h5>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="d-flex flex-column ">
+                    <a href="#">
+                        <img src="image/Guidance.jpg " alt=" " height="100px " width="100% ">
+                    </a>
+                </div>
+                <div class="d-flex flex-column ">
+                    <button class="btn btn-warning btn-sm " style="border-radius: 10px; "><b style="color: rgb(138, 0, 0); ">Create</b></button>
+                </div>
+                <br>
+
+                <ul class="list-unstyled components mb-5 ">
+                    <li>
+                        <a href="# "><span  class="fa fa-home mr-3 "></span> Dashboard</a>
+                    </li>
+                    <li class="active ">
+                        <a href="#"><span  id="yellow" class="fa fa-pencil mr-3 "></span> Create</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-briefcase mr-3 "></span> Events</a>
+                    </li>
+                    <li>
+                        <a href="# "><span class="fa fa-sticky-note mr-3 "></span> Tasks</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-paper-plane mr-3 "></span> Announcements</a>
+                    </li>
+                    <li>
+                        <a href="# "><span class="fa fa-cog mr-3 "></span> Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class=" " style="width:100%; ">
+            <div class="topbaR ">
+                <div>
+                    <i class="fa fa-bell-o fa-lg " aria-hidden="true "></i>
+                </div>
+            </div>
+            <!-- Page Content  -->
+            <div id="content2">
+                <div class="container ">
+                    <form action=" " method="post" enctype="multipart/form-data">
+                        <input type="text" value="{{activity.id}}" name="activity_id" hidden>
+                        <div class="row justify-content-center ">
+                            <div class="outer-form-background ">
+                                <div class="row ml-5 mt-4 pr-1">
+                                    <p class="custom-label">
+                                        Announcement
+                                    </p>
+                                </div>
+                                <hr>
+                                <div>
+                                    <div class="row justify-content-center" style="position: relative;">
+                                        {%if activity.picture.url is not null%}
+                                        <div data-toggle="modal" data-target="#view-photo-modal" class="row justify-content-center image-form" id="media-holder" style="background-image: url('{{activity.picture.url}}'); background-repeat: no-repeat;background-size: cover;">
+                                        </div>
+                                        {%else%}
+                                        <div data-toggle="modal" data-target="#view-photo-modal" class="row justify-content-center image-form" id="media-holder" style="background-image: url('{%static 'assets/img/background.png'%}'); background-repeat: no-repeat;background-size: cover;">
+                                        {%endif%}
+            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="custom-container">
+                                    <div class="row justify-content-center">
+                                        <div class="mt-1 col-xl-2 col-md-12 col-sm-12">
+                                            <p class="custom-label">Name</p>
+                                        </div>
+                                        <div class="col-xl-10 col-md-12 col-sm-12">
+                                            <input type="name" class="input-field" value="{{activity.title}}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-xl-2 col-md-12 col-sm-12">
+                                            <p class="custom-label">Description</p>
+                                        </div>
+                                        <div class="col-xl-10 col-md-12 col-sm-12">
+                                            <textarea style="height: 100px; " class="input-field " cols="30 " rows="10 " readonly>{{activity.description}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-start">
+                                        <div class="mt-2 col-xl-2 col-md-2 col-sm-3">
+                                            <p class="custom-label">Valid Until </p>
+                                        </div>
+                                        <div class="col-xl-4 col-md-10 col-sm-9">
+                                            <input type="name" class="input-field" readonly value="{{activity.valid_until_date}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="row justify-content-start">
+                                        <div class="mt-2 col-xl-5 col-md-5 col-sm-5">
+                                            <p class="custom-label">Extend To Other Communities</p>
+                                        </div>
+                                        <div class="col-xl-7 col-md-7 col-sm-6 ">
+                                            <input type="checkbox" class="mt-2" style="width: 20px; height: 20px; " id="anotherCom" disabled 
+                                                {%if activity.extendToOtherCommunities%} checked {%endif%}
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <p class="custom-label text-center">Targets</p>
+                                        </div>
+                                    </div>
+                                    {%for department in activity.getTargetDepartments%}
+                                        <div class="row justify-content-center">
+                                            <div class="mt-2 col-xl-2 col-md-1 col-sm-3">
+                                                <p class="custom-label">College</p>
+                                            </div>
+                                            <div class="col-xl-10 col-md-4 col-sm-12">
+                                                    <input type="college_name" class="input-field" readonly value="{{department.department.college_id.name}}">
+                                            </div>
+                                            <div class="mt-2 col-xl-2 col-md-1 col-sm-3">
+                                                <p class="custom-label ">Department</p>
+                                            </div>
+                                             <div class="col-xl-10 col-md-4 col-sm-12">
+                                                    <input type="department_name" class="input-field" readonly value="{{department.department.name}}">
+                                            </div>
+                                        </div>
+                                        {%endfor%}
+                                </div>
+                                <br>
+                                <br>
+                                <div class="row justify-content-end mr-5">
+                                    <a href="#"><button class="btn btn-secondary custom-label " style="border-radius:10px ; width: 100px; color: white; margin-right: 10px; " type="button" 
+                                    data-toggle="modal" data-target="#reject-activity-modal" {%if activity.status_id.name != 'Pending'%} disabled {%endif%}>Reject</button></a>
+                                    <button class="btn btn-warning custom-label " style="border-radius:10px ; width: 100px; " type="button" data-toggle="modal" data-target="#approve-activity-modal" {%if activity.status_id.name != 'Pending'%} disabled {%endif%}>Approve</button>
+                                </div>
+                                <br>
+                                <br>
+                                <br>
+                            </div>
+                        </div>
+                        <br>
+                    </form>
+                    <div class="modal fade " id="view-photo-modal" tabindex="-1 " role="dialog " aria-labelledby="myLargeModalLabel " aria-hidden="true ">
+                        <div class="modal-dialog modal-lg ">
+                            <div class="modal-content " style="background-color: transparent; border-color:transparent ; ">
+                                <center>
+                                    {%if activity.picture.url is not null%}
+                                        <img src="{{activity.picture.url}} " width="90% " height="90% " alt=" " id="image-content-modal">
+                                    {%else%}
+                                        <img src="{%static 'assets/img/background.png'%}" width="90% " height="90% " alt=" " id="image-content-modal">
+                                    {%endif%}
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Reject Modal-->
+            <div class="modal fade" id="reject-activity-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title labels" id="exampleModalLabel"><span class="reject-header">REJECT</span> Activity</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="" method="POST">
+            {% csrf_token %}
+                <input type="text" name="activity_id" value="{{activity.id}}" hidden>
+            <div class="modal-body">
+                <p>Are you sure you want to <span class="rejected-status">reject</span> this activity?</p>
+                <div class="form-item inputWrapper-activities mt-4">
+                    <textarea class="form-input" name="reject-activity-message" rows="6" placeholder="include message for the creator"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn pageBtn" data-dismiss="modal" style="width: fit-content;">Cancel</button>
+                <button type="submit" class="btn reject-button-activities modal-reject-activities" id="btnDelete" name="btnReject">Reject</button>
+            </div>
+        </form>
+        </div>
+        </div>
+        </div>
+        <!--Approve Modal-->
+        <div class="modal fade" id="approve-activity-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title labels" id="exampleModalLabel"><span class="approve-header">APPROVE</span> Activity</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form action="" method="POST">
+        {% csrf_token %}
+            <input type="text" name="activity_id" value="{{activity.id}}" hidden>
+        <div class="modal-body">
+            <p>Are you sure you want to <span class="approved-status">approve</span> this activity?</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn pageBtn" data-dismiss="modal" style="width: fit-content;">Cancel</button>
+            <button type="submit" class="btn approve-button-activities modal-approve-activities" id="btnApprove" name="btnApprove">Approve</button>
+        </div>
+    </form>
+    </div>
+    </div>
+    </div>
+
+
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="{%static 'assets/js/main.js'%}"></script>
+</body>
+
+</html>

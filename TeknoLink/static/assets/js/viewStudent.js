@@ -36,7 +36,6 @@ $(document).ready(function() {
         reader.readAsDataURL(input.files[0]);
       }
     }
-    $('body').removeClass('modal-open');
 
     var skillsTable= $('#skill-table').DataTable({
         dom: 'lBfrtip',

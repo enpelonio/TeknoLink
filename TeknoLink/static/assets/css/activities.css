@@ -228,3 +228,6 @@ body{
     border-radius: 10px;
     height: fit-content;
 }
+body.modal-open {
+    overflow: hidden;
+}

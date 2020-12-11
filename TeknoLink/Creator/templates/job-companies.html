@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job/Companies</title>
+    {%load static%}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://use.fontawesome.com/43bd965db5.js"></script>
@@ -12,7 +13,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.css"/>
-    <link rel="stylesheet" href="viewStudent.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script
   src="https://code.jquery.com/jquery-3.5.1.js"
@@ -23,15 +23,63 @@
   integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
   crossorigin="anonymous"></script>
     <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
-    <link rel="stylesheet" href="communities.css">
-    <link rel="stylesheet" href="createCommunity.css">
-    <link rel="stylesheet" href="activities.css">
-    <link rel="stylesheet" href="viewStudent.css">
-    <link rel="stylesheet" href="job-companies.css">
+    <link rel="stylesheet" href="{%static 'assets/css/sidebar.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/viewStudent.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/communities.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/createCommunity.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/activities.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/viewStudent.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/job-companies.css'%}">
     <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 </head>
 <body>
+    <div class="wrapper d-flex align-items-stretch ">
+        <nav id="sidebar" class="" style="height: 100vh;">
+            <div class="custom-menu ">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary ">
+                    <i class="fa fa-bars " style="color: white;"></i>
+                    <span class="sr-only ">Toggle Menu</span>
+                </button>
+            </div>
+            <div class="p-4 ">
+                <div class="d-flex flex-row align-items-stretch ">
+                    <img src="{%static 'assets/img/navlogo.png'%}" alt=" " height="40 " width="40 " style="margin-right: 20px; ">
+                    <div>
+                        <h5><b> TeknoLink Administrator</b></h5>
+                    </div>
+                </div>
+                <hr>
+                <br>
+                <ul class="list-unstyled components mb-5 ">
+                    <li>
+                        <a href="{% url 'Creator:students_view' %}"><span  class="fa fa-graduation-cap mr-3 "></span> Student</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'Creator:student_posts_view' %}"><span  class="fa fa-clipboard mr-3 "></span> Student Post</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'Creator:communities_view' %} "><span class="fa fa-sitemap mr-3 "></span> Community</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'Creator:skill_skill_category_view' %}"><span class="fa fa-level-up mr-3 "></span> Skill/Category</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'Creator:departments_colleges_view' %} "><span class="fa fa-university mr-3 "></span> College/Department</a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'Creator:jobs_companies_view' %}"><span class="fa fa-briefcase mr-3 " id="yellow"></span> Job/Company</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class=" " style="width:100%; ">
+            <div class="topbaR">
+                <div>
+                    <i class="fa fa-bell-o fa-lg " aria-hidden="true "></i>
+                </div>
+            </div>
+            <div style="overflow-y: scroll; height: 100vh;">
     <!--Jobs Table-->
     <div class="container container-communities">
         <div class="row">
@@ -88,21 +136,80 @@
                             </tr>
                         </thead>
                         <tbody>
+                        {%for job in jobs%}
                             <tr>
-                                <td>12-25-2020</td>
-                                <td>Systems Engineer</td>
-                                <td>dsfsgfskhadfkjskjsfdsjhdfshjfdsljajklsdjkadkflshuogwiyiqueryq7yreiuf</td>
+                                <td>{{job.date_created}}</td>
+                                <td>{{job.name}}</td>
+                                <td>{{job.description}}</td>
                                 <td><span data-toggle="tooltip" title="Edit"><button type="button" class="column-button edit-button-view-student ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#edit-skill-modal"><i class="fa fa-pencil button-icon-communities"></i></button></span>
+                                    data-toggle="modal" data-target="#edit-job{{job.id}}-modal"><i class="fa fa-pencil button-icon-communities"></i></button></span>
                                 </td>
                             </tr>
+                        {%endfor%}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-    <!--Add Job Modal-->
+    {%for job in jobs%}
+      <!--Edit Job Modal-->
+      <div class="modal fade" id="edit-job{{job.id}}-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-content-communities">
+            <div class="modal-header">
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">Edit Job
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body ui-front">
+                <div class="container">
+                    <form class="row row-edit-community" id="job-form" method="POST">
+                    {% csrf_token %}
+                    <input type="text" value="{{job.id}}" name="job_id" hidden>
+                        <div class="col-sm-12 col-md-6">
+                            <p class="labels">Job Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input type="text" class="form-input form-input-view-student" value="{{job.name}}" name="job_name">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Description</p>
+                            <div class="form-item inputWrapper">
+                                <textarea class="form-input" name="job_description" rows="6">{{job.description}}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Required Skills</p>
+                            <div class="form-item d-flex align-content-center inputWrapper ui-widget">
+                                <input class="form-input form-input-view-student add-skill-txb" value="">
+                                <button type="button" class="w-40 addSkillBtn" id="addBtn">Add Skill</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="row" style="padding-left: 15px; padding-right: 15px;">
+                                <div class="col-sm-12 form-item inputWrapper tag-container-job-companies tag-container-job-companies-skill" style="overflow-y: scroll;">
+                                    {%for job_skill in job.getAssociatedSkills%}
+                                    <input type="text" value="{{job_skill.id}}" name="job_skill_id" hidden>
+                                    <div class="tag-item form-item inputWrapper ml-2 mr-2 p-2 mt-2 mb-2 d-inline-block"><span class="mr-2 ml-2">{{job_skill.skill_id.name}}
+                                    </span><input type="text" value="{{job_skill.skill_id.id}}" name="job_skill" hidden><button onclick="RemoveSkillTag(this)" data-toggle="tooltip" title="Remove Skill"><i class="fa fa-times"></i></button></div>
+                                    {%endfor%}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="pageBtn labels float-right" type="submit" name="btnUpdateJob">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+      <!--Add Job Modal-->
     <div class="modal fade" id="add-skill-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
           <div class="modal-content modal-content-communities">
@@ -113,19 +220,20 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body ui-front">
                 <div class="container">
                     <form class="row row-edit-community" id="job-form" method="POST">
+                    {%csrf_token%}
                         <div class="col-sm-12 col-md-6">
                             <p class="labels">Name</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
-                                <input type="text" class="form-input form-input-view-student">
+                                <input type="text" class="form-input form-input-view-student" name="job_name">
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
                             <p class="labels">Description</p>
                             <div class="form-item inputWrapper">
-                                <textarea class="form-input name="community_description" rows="6"></textarea>
+                                <textarea class="form-input" name="job_description" rows="6" name="job_name"></textarea>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
@@ -136,84 +244,22 @@
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
-                            <div class="form-item inputWrapper tag-container-job-companies tag-container-job-companies-skill d-flex">
+                            <div class="row" style="padding-left: 15px; padding-right: 15px;">
+                                <div class="col-sm-12 form-item inputWrapper tag-container-job-companies tag-container-job-companies-skill" style="overflow-y: scroll;">
+                                </div>
                             </div>
                         </div>
                         <div class="col-12 mt-3">
-                            <button class="pageBtn labels float-right" type="submit">Add</button>
+                            <button class="pageBtn labels float-right" type="submit" name="btnAddJob">Add</button>
                         </div>
                     </form>
-                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                          <div class="modal-content">
-                            <div class="modal-body">
-                                <img src="background.png" alt="" id="image-content-modal">
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--Edit Job Modal-->
-      <div class="modal fade" id="edit-skill-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content modal-content-communities">
-            <div class="modal-header">
-                <h5 class="modal-title text-center labels" id="exampleModalLabel">Edit Job
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <form class="row row-edit-community" id="job-form" method="POST">
-                        <div class="col-sm-12 col-md-6">
-                            <p class="labels">Name</p>
-                            <div class="form-item d-flex align-content-center inputWrapper">
-                                <input type="text" class="form-input form-input-view-student">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <p class="labels">Description</p>
-                            <div class="form-item inputWrapper">
-                                <textarea class="form-input name="community_description" rows="6"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <p class="labels">Required Skills</p>
-                            <div class="form-item d-flex align-content-center inputWrapper ui-widget">
-                                <input class="form-input form-input-view-student add-skill-txb" value="">
-                                <button type="button" class="w-40 addSkillBtn" id="addBtn">Add Skill</button>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <div class="form-item inputWrapper tag-container-job-companies tag-container-job-companies-skill d-flex">
-                            </div>
-                        </div>
-                        <div class="col-12 mt-3">
-                            <button class="pageBtn labels float-right" type="submit">Update</button>
-                        </div>
-                    </form>
-                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                          <div class="modal-content">
-                            <div class="modal-body">
-                                <img src="background.png" alt="" id="image-content-modal">
-                            </div>
-                          </div>
-                        </div>
-                    </div>
                 </div>
             </div>
           </div>
         </div>
       </div>
     <!--Companies Table-->
-    <div class="container container-communities">
+    <div class="container container-communities mb-5">
         <div class="row">
             <div class="col-sm-12 col-md-3 p-0">
                 <p class="text-center pageTitle p-1">Companies</p>
@@ -268,22 +314,124 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {%for company in companies%}
                             <tr>
-                                <td>12-25-2020</td>
-                                <td>Rococo Global Technologies</td>
-                                <td>Rococo Global Technologies is a asljhdlsjkfhoasjdpodjifpgigjp</td>
+                                <td>{{company.date_created}}</td>
+                                <td>{{company.name}}</td>
+                                <td>{{company.description}}</td>
                                 <td><span data-toggle="tooltip" title="Edit"><button type="button" class="column-button edit-button-view-student ml-1 mr-1 mt-1" id="" 
-                                    data-toggle="modal" data-target="#view-milestone-modal"><i class="fa fa-pencil button-icon-communities"></i></button></span>
+                                    data-toggle="modal" data-target="#view-company{{company.id}}-modal"><i class="fa fa-pencil button-icon-communities"></i></button></span>
                                     </td>
                                 </td>
                             </tr>
+                            {%endfor%}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-    <!--Add Company Modal-->
+    {%for company in companies%}
+      <!--View Company Modal-->
+      <div class="modal fade" id="view-company{{company.id}}-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-content-communities">
+            <div class="modal-header">
+                <h5 class="modal-title text-center labels" id="exampleModalLabel">Edit Company
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body ui-front">
+                <form class="container" method="POST" enctype="multipart/form-data">
+                <input  name="company_id" type="text" value="{{company.id}}" hidden>
+                {%csrf_token%}
+                    <div class="row justify-content-center row-edit-community">
+                        <div class="col-md-10 col-sm-9">
+                             {%if company.picture.url is not null%}
+                            <img src="{{company.picture.url}}" alt="" class="image-background">
+                            {%else%}
+                            <img src="{%static 'assets/img/background.png'%}" alt="" class="image-background">
+                            {%endif%}
+                            <input type="file" class="fileInput" name="fileInput" hidden>
+                            <input type="text" class="changeFlag" name="changeFlag" value="F" hidden>
+                            <button class="uploadPhotoBtn pageBtn labels" type="button">Upload Photo</button>
+                        </div>
+                    </div>
+                    <div class="row row-edit-community mt-4" method="POST">
+                        <div class="col-sm-12 col-md-6 mt-3">
+                            <p class="labels">Company Name</p>
+                            <div class="form-item d-flex align-content-center inputWrapper">
+                                <input class="form-input form-input-view-student" name="company_name" type="text" value="{{company.name}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Description</p>
+                            <div class="form-item inputWrapper">
+                                <textarea class="form-input" name="company_description" rows="6">{{company.description}}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Wanted Jobs</p>
+                            <div class="form-item d-flex align-content-center inputWrapper ui-widget">
+                                <input class="form-input form-input-view-student add-job-txb" value="">
+                                <button type="button" class="w-40 addJobBtn" id="addBtn">Add Job</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="row" style="padding-left: 15px; padding-right: 15px;">
+                                <div class="col-sm-12 form-item inputWrapper tag-container-job-companies tag-container-job-companies-job" style="overflow-y: scroll;">
+                                    {%for company_job in company.getAssociatedJobs%}
+                                    <input type="text" value="{{company_job.id}}" name="company_job_id" hidden>
+                                    <div class="tag-item form-item inputWrapper ml-2 mr-2 p-2 mt-2 mb-2 d-inline-block"><span class="mr-2 ml-2">{{company_job.job_id.name}}
+                                    </span><input type="text" value="{{company_job.job_id.id}}" name="company_job" hidden><button onclick="RemoveSkillTag(this)" data-toggle="tooltip" title="Remove Skill"><i class="fa fa-times"></i></button></div>
+                                    {%endfor%}
+                                </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <p class="labels">Wanted Skills</p>
+                            <div class="form-item d-flex align-content-center inputWrapper ui-widget">
+                                <input class="form-input form-input-view-student add-skill-txb" value="">
+                                <button type="button" class="w-40 addSkillBtn" id="addBtn">Add Skill</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="row" style="padding-left: 15px; padding-right: 15px;">
+                                <div class="col-sm-12 form-item inputWrapper tag-container-job-companies tag-container-job-companies-skill" style="overflow-y: scroll;">
+                                    {%for company_skill in company.getAssociatedSkills%}
+                                    <input type="text" value="{{company_skill.id}}" name="company_skill_id" hidden>
+                                    <div class="tag-item form-item inputWrapper ml-2 mr-2 p-2 mt-2 mb-2 d-inline-block"><span class="mr-2 ml-2">{{company_skill.skill_id.name}}
+                                    </span><input type="text" value="{{company_skill.skill_id.id}}" name="job_skill" hidden><button onclick="RemoveSkillTag(this)" data-toggle="tooltip" title="Remove Skill"><i class="fa fa-times"></i></button></div>
+                                    {%endfor%}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="pageBtn labels float-right" type="submit" name="btnUpdateCompany">Update</button>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                                {%if company.picture.url is not null%}
+                                <img src="{{company.picture.url}}" alt="" id="image-content-modal">
+                                {%else%}
+                                <img src="{%static 'assets/img/background.png'%}" alt="" id="image-content-modal">
+                                {%endif%}
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      {%endfor%}
+      <!--Add Company Modal-->
     <div class="modal fade" id="add-milestone-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
           <div class="modal-content modal-content-communities">
@@ -294,12 +442,13 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form class="container">
+            <div class="modal-body ui-front">
+                <form class="container" method="POST" enctype="multipart/form-data">
+                    {%csrf_token%}
                     <div class="row justify-content-center row-edit-community">
                         <div class="col-md-10 col-sm-9">
-                            <img src="background.png" alt="" class="image-background">
-                            <input type="file" class="fileInput" hidden>
+                            <img src="{%static 'assets/img/background.png'%}" alt="" class="image-background">
+                            <input type="file" class="fileInput" name="fileInput" hidden>
                             <button class="uploadPhotoBtn pageBtn labels" type="button">Upload Photo</button>
                         </div>
                     </div>
@@ -307,119 +456,50 @@
                         <div class="col-sm-12 col-md-6 mt-3">
                             <p class="labels">Company Name</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
-                                <input class="form-input form-input-view-student" type="text" value="">
+                                <input class="form-input form-input-view-student" type="text" value="" name="company_name">
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
                             <p class="labels">Description</p>
                             <div class="form-item inputWrapper">
-                                <textarea class="form-input name="community_description" rows="6"></textarea>
+                                <textarea class="form-input" name="company_description" rows="6"></textarea>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
-                            <p class="labels">Wanted Jobs</p>
+                            <p class="labels">Job Demands</p>
                             <div class="form-item d-flex align-content-center inputWrapper ui-widget">
                                 <input class="form-input form-input-view-student add-job-txb" value="">
                                 <button type="button" class="w-40 addJobBtn" id="addBtn">Add Job</button>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
-                            <div class="form-item inputWrapper tag-container-job-companies tag-container-job-companies-job d-flex">
+                            <div class="row" style="padding-left: 15px; padding-right: 15px;">
+                                <div class="col-sm-12 form-item inputWrapper tag-container-job-companies tag-container-job-companies-job" style="overflow-y: scroll;">
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
-                            <p class="labels">Required Skills</p>
+                            <p class="labels">Wanted Skills</p>
                             <div class="form-item d-flex align-content-center inputWrapper ui-widget">
                                 <input class="form-input form-input-view-student add-skill-txb" value="">
                                 <button type="button" class="w-40 addSkillBtn" id="addBtn">Add Skill</button>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
-                            <div class="form-item inputWrapper tag-container-job-companies tag-container-job-companies-skill d-flex">
+                            <div class="row" style="padding-left: 15px; padding-right: 15px;">
+                                <div class="col-sm-12 form-item inputWrapper tag-container-job-companies tag-container-job-companies-skill" style="overflow-y: scroll;">
+                                </div>
                             </div>
                         </div>
                         <div class="col-12 mt-3">
-                            <button class="pageBtn labels float-right" type="submit">Add</button>
+                            <button class="pageBtn labels float-right" type="submit" name="btnAddCompany">Add</button>
                         </div>
                     </div>
                     <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                           <div class="modal-content">
                             <div class="modal-body">
-                                <img src="background.png" alt="" id="image-content-modal">
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--View Company Modal-->
-      <div class="modal fade" id="view-milestone-modal" style="overflow-y: scroll;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content modal-content-communities">
-            <div class="modal-header">
-                <h5 class="modal-title text-center labels" id="exampleModalLabel">Edit Company
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form class="container">
-                    <div class="row justify-content-center row-edit-community">
-                        <div class="col-md-10 col-sm-9">
-                            <img src="background.png" alt="" class="image-background">
-                            <input type="file" class="fileInput" hidden>
-                            <button class="uploadPhotoBtn pageBtn labels" type="button">Upload Photo</button>
-                        </div>
-                    </div>
-                    <div class="row row-edit-community mt-4" method="POST">
-                        <div class="col-sm-12 col-md-6 mt-3">
-                            <p class="labels">Company Name</p>
-                            <div class="form-item d-flex align-content-center inputWrapper">
-                                <input class="form-input form-input-view-student" type="text" value="">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <p class="labels">Description</p>
-                            <div class="form-item inputWrapper">
-                                <textarea class="form-input name="community_description" rows="6"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <p class="labels">Wanted Jobs</p>
-                            <div class="form-item d-flex align-content-center inputWrapper ui-widget">
-                                <input class="form-input form-input-view-student add-job-txb" value="">
-                                <button type="button" class="w-40 addJobBtn" id="addBtn">Add Job</button>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <div class="form-item inputWrapper tag-container-job-companies tag-container-job-companies-job d-flex">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <p class="labels">Required Skills</p>
-                            <div class="form-item d-flex align-content-center inputWrapper ui-widget">
-                                <input class="form-input form-input-view-student add-skill-txb" value="">
-                                <button type="button" class="w-40 addSkillBtn" id="addBtn">Add Skill</button>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <div class="form-item inputWrapper tag-container-job-companies tag-container-job-companies-skill d-flex">
-                            </div>
-                        </div>
-                        <div class="col-12 mt-3">
-                            <button class="pageBtn labels float-right" type="submit">Add</button>
-                        </div>
-                    </div>
-                    <div class="modal fade" id="view-photo-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                          <div class="modal-content">
-                            <div class="modal-body">
-                                <img src="background.png" alt="" id="image-content-modal">
+                                <img src="{%static 'assets/img/background.png'%}" alt="" id="image-content-modal">
                             </div>
                           </div>
                         </div>
@@ -439,10 +519,11 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<form action="" method="POST">
-    <input type="text" name="cIdNum" value="{{customer.id}}" hidden>
+</div>
 <div class="modal-body">
     <p class="">Skill is not listed in the database. You can try to add the skill in the Skill and Skill Category Section before performing an association.</p>
+</div>
+    </div>
 </div>
 <!--Try Again Job-->
 <div class="modal fade" id="job-not-found-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
@@ -454,14 +535,14 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<form action="" method="POST">
-    <input type="text" name="cIdNum" value="{{customer.id}}" hidden>
 <div class="modal-body">
-    <p class="">Skill is not listed in the database. You can try to add the job in the Job Section before performing an association.</p>
-</div>
-</form>
+    <p class="">Job is not listed in the database. You can try to add the job in the Job Section before performing an association.</p>
 </div>
 </div>
+</div>
+</div>
+        </div>
+    </div>
 </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -472,9 +553,10 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.10.21/dataRender/ellipsis.js"></script>
-    <script src="addCommunity.js"></script>
-    <script src="job-companies.js"></script>
-    <script src="departments-colleges.js"></script>
+    <script src="{%static 'assets/js/addCommunity.js'%}"></script>
+    <script src="{%static 'assets/js/job-companies.js'%}"></script>
+    <script src="{%static 'assets/js/departments-colleges.js'%}"></script>
+    <script src="{% static 'assets/js/sidebar.js'%}"></script>
 </body>
 </html>
 

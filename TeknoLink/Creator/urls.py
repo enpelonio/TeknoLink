@@ -9,9 +9,15 @@ urlpatterns = [
      path('students',views.StudentsView.as_view(), name="students_view"),
      path('skill-skill-category',views.SkillAndCategoryView.as_view(),name="skill_skill_category_view"),
      path('student-posts',views.StudentPostView.as_view(),name='student_posts_view'),
+     path('jobs-companies',views.JobCompanyView.as_view(),name='jobs_companies_view'),
+     path('activities',views.ActivitiesView.as_view(),name='activities_view'),
      path('get-departments-belonging-to-college/', views.getDepartmentsBelongingToCollege, name='get-departments-belonging-to-college'),
      path('validate-community-name/',views.validateCommunityName, name='validate-community-name'),
-     #path('students-view',views.StudentDetailView.as_view(),name="student_detail_view"),
+     path('students-view/<str:id>/',views.viewStudentDetails,name="student_detail_view"),
+     path('view-activity/<int:id>/',views.viewActivityDetails,name="activity_detail_view"),
      path('get-skills-of-a-category/',views.getSkillsOfACategory,name="get-skills-of-a-category"),
-     path('validate-student-id/',views.validateStudentId,name="validate-user-id")
+     path('validate-student-id/',views.validateStudentId,name="validate-user-id"),
+     path('get-all-skills/',views.getAllSkills,name="get-all-skills"),
+     path('get-all-jobs/',views.getAllJobs,name="get-all-jobs")
+
 ]  

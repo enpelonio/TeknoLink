@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activities</title>
+    {%load static%}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://use.fontawesome.com/43bd965db5.js"></script>
@@ -16,10 +17,66 @@
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
     <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
-    <link rel="stylesheet" href="activities.css">
+    <link rel="stylesheet" href="{%static 'assets/css/sidebar.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/activities.css'%}">
 </head>
 <body>
-    <div class="container container-communities">
+    <div class="wrapper d-flex align-items-stretch ">
+        <nav id="sidebar" class="" style="height: 100vh;">
+            <div class="custom-menu ">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary ">
+	          <i class="fa fa-bars " style="color:white;"></i>
+	          <span class="sr-only ">Toggle Menu</span>
+	        </button>
+            </div>
+            <div class="p-4 ">
+                <div class="d-flex flex-row align-items-stretch ">
+                    <img src="image/navlogo.png " alt=" " height="40 " width="40 " style="margin-right: 20px; ">
+                    <div>
+                        <h5><a href="index.html " class="logo "><b> TeknoLink</b></a> </h5>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="d-flex flex-column ">
+                    <a href="#">
+                        <img src="image/Guidance.jpg " alt=" " height="100px " width="100% ">
+                    </a>
+                </div>
+                <div class="d-flex flex-column ">
+                    <button class="btn btn-warning btn-sm " style="border-radius: 10px; "><b style="color: rgb(138, 0, 0); ">Create</b></button>
+                </div>
+                <br>
+
+                <ul class="list-unstyled components mb-5 ">
+                    <li>
+                        <a href="# "><span  class="fa fa-home mr-3 "></span> Dashboard</a>
+                    </li>
+                    <li class="active ">
+                        <a href="#"><span  id="yellow" class="fa fa-pencil mr-3 "></span> Create</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-briefcase mr-3 "></span> Events</a>
+                    </li>
+                    <li>
+                        <a href="# "><span class="fa fa-sticky-note mr-3 "></span> Tasks</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-paper-plane mr-3 "></span> Announcements</a>
+                    </li>
+                    <li>
+                        <a href="# "><span class="fa fa-cog mr-3 "></span> Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class=" " style="width:100%; ">
+            <div class="topbaR ">
+                <div>
+                    <i class="fa fa-bell-o fa-lg " aria-hidden="true "></i>
+                </div>
+            </div>
+    <div class="container container-communities mb-5">
         <div class="row">
             <div class="col-sm-12 col-md-3 p-0">
                 <p class="text-center pageTitle p-1">Activities</p>
@@ -67,9 +124,9 @@
                 <label for="" class="ml-2 mr-2">Status:</label>
                 <select name="" id="select-status-activities" class="ml-2 mr-2 select-activities">
                     <option value="" selected>All</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Rejected">Rejected</option>
+                    {%for status in activity_status%}
+                    <option value="{{status.name}}">{{status.name}}</option>
+                    {%endfor%}
                 </select>
             </div>
         </div>
@@ -88,117 +145,28 @@
                             </tr>
                         </thead>
                         <tbody>
+                        {%for activity in activities%}
                             <tr>
-                                <td>12-25-2020</td>
-                                <td>SSG Office</td>
-                                <td>Midterm Tutorials</td>
-                                <td>Event</td>
-                                <td class="approved-status">Approved</td>
-                                <td><span data-toggle="tooltip" title="View" disabled><button type="button" class="column-button view-button ml-1 mr-1" id="" 
-                                    data-toggle="modal" data-target="#view-community-modal"><i class="fa fa-eye button-icon-communities"></i></button></span>
-                                    <span data-toggle="tooltip" title="Approve"><button type="button" class="column-button ml-1 mr-1 approve-button-activities" id="" 
-                                    data-toggle="modal" data-target="#approve-activity-modal" disabled> Approve</button></span>
-                                    <span data-toggle="tooltip" title="Reject"><button type="button" class="column-button ml-1 mr-1 reject-button-activities" id="" 
-                                        data-toggle="modal" data-target="#reject-activity-modal" disabled> Reject</button></span>
+                                <td>{{activity.date_created}}</td>
+                                <td>{{activity.creator_community_id.name}}</td>
+                                <td>{{activity.title}}</td>
+                                <td>{{activity.activity_type}}</td>
+                                <td class="{%if activity.status_id.name == 'Approved'%}approved-status{%elif activity.status_id.name == 'Pending'%}pending-status{%else%}rejected-status{% endif %}">{{activity.status_id.name}}</td>
+                                <td class="d-flex justify-content-center"><form method="POST" class="mt-1 d-inline-block">{% csrf_token %}<span data-toggle="tooltip" title="View" disabled><button type="submit" class="column-button view-button ml-1 mr-1" id="" 
+                                    name='btnViewActivity'><input type="text" value="{{activity.id}}" name="activity_id" hidden><i class="fa fa-eye button-icon-communities"></i></button></span>
+                                    </form>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>12-25-2020</td>
-                                <td>SSG Office</td>
-                                <td>Announcement 1</td>
-                                <td>Announcement</td>
-                                <td class="pending-status">Pending</td>
-                                <td><span data-toggle="tooltip" title="View"><button type="button" class="column-button view-button ml-1 mr-1" id="" 
-                                    data-toggle="modal" data-target="#view-community-modal"><i class="fa fa-eye button-icon-communities"></i></button></span>
-                                    <span data-toggle="tooltip" title="Approve"><button type="button" class="column-button ml-1 mr-1 approve-button-activities" id="" 
-                                    data-toggle="modal" data-target="#approve-activity-modal"> Approve</button></span>
-                                    <span data-toggle="tooltip" title="Reject"><button type="button" class="column-button ml-1 mr-1 reject-button-activities" id="" 
-                                        data-toggle="modal" data-target="#reject-activity-modal"> Reject</i></button></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>12-25-2020</td>
-                                <td>SSG Office</td>
-                                <td>Task1</td>
-                                <td>Task</td>
-                                <td class="rejected-status">Rejected</td>
-                                <td><span data-toggle="tooltip" title="View"><button type="button" class="column-button view-button ml-1 mr-1" id="" 
-                                    data-toggle="modal" data-target="#view-community-modal"><i class="fa fa-eye button-icon-communities"></i></button></span>
-                                    <span data-toggle="tooltip" title="Approve"><button type="button" class="column-button ml-1 mr-1 approve-button-activities" id="" 
-                                    data-toggle="modal" data-target="#approve-activity-modal" disabled> Approve</button></span>
-                                    <span data-toggle="tooltip" title="Reject"><button type="button" class=" column-button ml-1 mr-1 reject-button-activities" id="" 
-                                        data-toggle="modal" data-target="#reject-activity-modal" disabled> Reject</i></button></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>12-25-2020</td>
-                                <td>SSG Office</td>
-                                <td>Event2</td>
-                                <td>Event</td>
-                                <td class="rejected-status">Rejected</td>
-                                <td><span data-toggle="tooltip" title="View"><button type="button" class="column-button view-button ml-1 mr-1" id="" 
-                                    data-toggle="modal" data-target="#view-community-modal"><i class="fa fa-eye button-icon-communities"></i></button></span>
-                                    <span data-toggle="tooltip" title="Approve"><button type="button" class="column-button ml-1 mr-1 approve-button-activities" id="" 
-                                    data-toggle="modal" data-target="#approve-activity-modal" disabled> Approve</button></span>
-                                    <span data-toggle="tooltip" title="Reject"><button type="button" class="column-button ml-1 mr-1 reject-button-activities" id="" 
-                                        data-toggle="modal" data-target="#reject-activity-modal" disabled> Reject</button></span>
-                                </td>
-                            </tr>
+                            {%endfor%}
                         </tbody>
                     </table>
                 </div>
             </div>
-            <!--Reject Modal-->
-            <div class="modal fade" id="reject-activity-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title labels" id="exampleModalLabel"><span class="reject-header">REJECT</span> Activity</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="" method="POST">
-                <input type="text" name="cIdNum" value="{{customer.id}}" hidden>
-            <div class="modal-body">
-                <p>Are you sure you want to <span class="rejected-status">reject</span> this activity?</p>
-                <div class="form-item inputWrapper-activities mt-4">
-                    <textarea class="form-input name="reject-activity-message" rows="6" placeholder="include message for the creator"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn pageBtn" data-dismiss="modal" style="width: fit-content;">Cancel</button>
-                <button type="submit" class="btn reject-button-activities modal-reject-activities" id="btnDelete" name="btnDelete">Reject</button>
-            </div>
-        </form>
         </div>
-        </div>
-        </div>
-        <!--Approve Modal-->
-        <div class="modal fade" id="approve-activity-modal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title labels" id="exampleModalLabel"><span class="approve-header">APPROVE</span> Activity</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <form action="" method="POST">
-            <input type="text" name="cIdNum" value="{{customer.id}}" hidden>
-        <div class="modal-body">
-            <p>Are you sure you want to <span class="approved-status">approve</span> this activity?</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn pageBtn" data-dismiss="modal" style="width: fit-content;">Cancel</button>
-            <button type="submit" class="btn approve-button-activities modal-approve-activities" id="btnDelete" name="btnDelete">Approve</button>
-        </div>
-    </form>
     </div>
     </div>
     </div>
-        </div>
-    </div>
+</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
@@ -207,7 +175,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
-    <script src="activities.js"></script>
+    <script src="{%static 'assets/js/activities.js'%}"></script>
+    <script src="{% static 'assets/js/sidebar.js'%}"></script>
 </body>
 </html>
 

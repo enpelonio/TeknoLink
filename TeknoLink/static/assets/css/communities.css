@@ -173,4 +173,7 @@ body{
     border-left: none !important;
     border-right: none !important;
 }
+body.modal-open {
+    overflow: hidden;
+}
 

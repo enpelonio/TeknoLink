@@ -22,7 +22,7 @@ $(document).ready(function() {
       });
       $(".image-background").on("click",function(){
         $(this).parent().parent().parent().find("#view-photo-modal").modal('show');
-        console.log("sdasdasadfg");
+        console.log($(this).parent().parent().parent().find("#view-photo-modal"));
       });
       $(".fileInput").on("change",function(){readURL(this)});
       function readURL(input){
@@ -38,7 +38,6 @@ $(document).ready(function() {
           reader.readAsDataURL(input.files[0]);
         }
       }
-      $('body').removeClass('modal-open');
       $(".community-name-create-community").on("change",function(){
         console.log("changed");
         var eventfirer=$(this);

@@ -19,3 +19,6 @@
 input:disabled,textarea:disabled{
     background-color: white;
 }
+body.modal-open {
+    overflow: hidden;
+}

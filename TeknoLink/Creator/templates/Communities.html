@@ -56,7 +56,7 @@
                     <a href="{% url 'Creator:departments_colleges_view' %} "><span class="fa fa-university mr-3 "></span> College/Department</a>
                 </li>
                 <li>
-                    <a href="#"><span class="fa fa-briefcase mr-3 "></span> Job/Company</a>
+                    <a href="{% url 'Creator:jobs_companies_view' %}"><span class="fa fa-briefcase mr-3 "></span> Job/Company</a>
                 </li>
             </ul>
         </div>
@@ -321,7 +321,7 @@
                             <div class="row justify-content-center row-edit-community">
                                 <div class="col-md-10 col-sm-9">
                                     <img src="{% static 'assets/img/background.png'%}" alt="" class="image-background">
-                                    <input type="file" class="fileInput" hidden>
+                                    <input type="file" class="fileInput" name="fileInput" hidden>
                                     <button class="uploadPhotoBtn pageBtn labels" type="button">Upload Photo</button>
                                 </div>
                             </div>
