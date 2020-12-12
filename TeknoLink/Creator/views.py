@@ -10,6 +10,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import random
 from django.utils import timezone,dateformat
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
+
 #functions
 @csrf_exempt
 def getDepartmentsBelongingToCollege(request):
@@ -45,6 +48,22 @@ def validateCommunityName(request):
         'exists': Community.objects.filter(name=com_name).exclude(name=com_initial_name).exists()
     }
     return JsonResponse(data)
+    
+def validateCollegeName(request):
+    college_name=request.GET.get('college_name',None)
+    college_initial_name=request.GET.get('college_initial_name',None)
+    data={
+        'exists': College.objects.filter(name=college_name).exclude(name=college_initial_name).exists()
+    }
+    return JsonResponse(data)
+
+def validateDepartmentName(request):
+    department_name=request.GET.get('department_name',None)
+    department_initial_name=request.GET.get('department_initial_name',None)
+    data={
+        'exists': Department.objects.filter(name=department_name).exclude(name=department_initial_name).exists()
+    }
+    return JsonResponse(data)
 
 def validateStudentId(request):
     student_id=request.GET.get('student_id',None)
@@ -77,15 +96,59 @@ def getAllJobs(request):
         'jobNames':jobNames
     }
     return JsonResponse(data)
+def logoutUser(request):
+    logout(request)
+    return redirect('Creator:login_view')
 
-#Classes
+#Classes and functions involving rendering
+def loginUser(request):
+    if request.method=="GET":
+        if request.user.is_authenticated:
+            if request.user.user_type == 'Administrator':
+                return redirect('Creator:students_view')
+            else:
+                return redirect('Creator:communities_view')
+        return render(request, 'login.html')
+    else:
+        user_id=request.POST.get('user_id')
+        password=request.POST.get('user_password')
+        user=authenticate(request,user_id=user_id,password=password)
+        print(user)
+        if user is not None:
+            if user.user_type == 'Administrator':
+                login(request,user)
+                return redirect('Creator:students_view')
+            else:
+                login(request,user)
+                return redirect('Creator:communities_view')
+    return redirect('Creator:login_view')
+def unauthorizedView(request):
+    return render(request,'unauthorized.html')
+    
 class CommunitiesView(View):
     def get(self,request):
-        qsCommunities=Community.objects.all()
+        if request.user.user_type=='Administrator':
+            qsCommunities=Community.objects.all()
+            url='Communities.html'
+        elif request.user.user_type=='Community':
+            community=Community.objects.get(user_id=request.user.user_id)
+            if community.isAdmin:
+                qsCommunities=self.getCommunityHeirarchy(community.getCreatedCommunities())
+                url='Communities-Creator.html'
+            else:
+                #TODO redirect to community dashboard
+                pass
         context={
             'communities': qsCommunities
         }
-        return render(request,'Communities.html',context)
+        return render(request,url,context)
+
+    def getCommunityHeirarchy(self,queryset):
+        combinedQuerySet=queryset
+        for com in queryset:
+            combinedQuerySet=combinedQuerySet.union(self.getCommunityHeirarchy(com.getCreatedCommunities()))
+        return combinedQuerySet
+
     def post(self,request):
         if request.method=='POST':
             if 'btnUpdate' in request.POST:
@@ -117,6 +180,7 @@ class CommunitiesView(View):
                 community=Community.objects.get(user_id=idCom)
                 if community.image_cover:
                     community.image_cover.delete()
+                community.getCreatedCommunities.update(create_admin_id=request.user.user_id)
                 community.delete()
             elif 'btnCreate' in request.POST:
                 name=request.POST.get('community_name')
@@ -130,7 +194,7 @@ class CommunitiesView(View):
                 contactNumbers=request.POST.getlist('community_contact_number')
                 changeFlag=request.POST.get('changeFlag')
                 image_cover=request.FILES.get('fileInput',None)
-                community=Community(user_id=idCom, name=name, description=description,isOffice=isOffice,isAdmin=isAdmin,location=location,user_type='Community')
+                community=Community(user_id=idCom, name=name, description=description,isOffice=isOffice,isAdmin=isAdmin,location=location,user_type='Community',create_admin_id=request.user.user_id)
                 community.save()
                 if image_cover is not None and image_cover != '':
                     community.image_cover.save(image_cover.name+str(community.user_id), File(image_cover),save=True)
@@ -141,13 +205,17 @@ class CommunitiesView(View):
 
 class DeptAndCollegesView(View):
     def get(self,request):
-        qsDept=Department.objects.all()
-        qsCollege=College.objects.all()
-        context={
-            'departments':qsDept,
-            'colleges':qsCollege
-        }
-        return render(request,'departments-colleges.html',context)
+        if request.user.user_type == 'Administrator':
+            qsDept=Department.objects.all()
+            qsCollege=College.objects.all()
+            context={
+                'departments':qsDept,
+                'colleges':qsCollege
+            }
+            return render(request,'departments-colleges.html',context)
+        else:
+            return redirect('Creator:unauthorized_view')
+
     def post(self,request):
         if request.method=='POST':
             if 'btnUpdateCollege' in request.POST:
@@ -186,17 +254,18 @@ class DeptAndCollegesView(View):
                 dept.save()
         return redirect ('Creator:departments_colleges_view')
         
-
-
 class SkillAndCategoryView(View):
     def get(self,request):
-        qsSkill=Skill.objects.all()
-        qsCategory=Skill_Category.objects.all()
-        context={
-            'skills':qsSkill,
-            'categories': qsCategory
-        }
-        return render(request,'skill-skill_category.html',context)
+        if request.user.user_type=='Administrator':
+            qsSkill=Skill.objects.all()
+            qsCategory=Skill_Category.objects.all()
+            context={
+                'skills':qsSkill,
+                'categories': qsCategory
+            }
+            return render(request,'skill-skill_category.html',context)
+        else:
+            return redirect('Creator:unauthorized_view')
     def post(self,request):
         if request.method=='POST':
             if 'btnUpdateCategory' in request.POST:
@@ -233,15 +302,18 @@ class SkillAndCategoryView(View):
 
 class StudentsView(View):
     def get(self, request):
-        qsStudent=Student.objects.all()
-        qsDept=Department.objects.all()
-        qsCollege=College.objects.all()
-        context={
-            'students':qsStudent,
-            'departments':qsDept,
-            'colleges':qsCollege
-        }
-        return render(request,'Students.html',context)
+        if request.user.user_type=='Administrator':
+            qsStudent=Student.objects.all()
+            qsDept=Department.objects.all()
+            qsCollege=College.objects.all()
+            context={
+                'students':qsStudent,
+                'departments':qsDept,
+                'colleges':qsCollege
+            }
+            return render(request,'Students.html',context)
+        else:
+            return redirect('Creator:unauthorized_view')
     def post(self,request):
         if request.method=='POST':
             if 'btnDelete' in request.POST:
@@ -282,26 +354,29 @@ class StudentsView(View):
 
 def viewStudentDetails(request,id):
     if request.method=="GET":
-        student=Student.objects.get(user_id=id)
-        qsSkills=Student_Possess_Skill.objects.filter(student_id=student)
-        qsMilestones=Milestone.objects.filter(owner_student_id=student)
-        qsColleges=College.objects.all()
-        qsDepartments=Department.objects.filter(college_id=student.department_id.college_id)
-        qsSkillCategory=Skill_Category.objects.all()
-        category_id=qsSkillCategory[0].id if qsSkillCategory else 0
-        qsDefaultSkillSet=Skill.objects.filter(category_id=category_id)
-        qsMilestoneTypes=Milestone_Type.objects.all()
-        context={
-            'student':student,
-            'skills':qsSkills,
-            'milestones':qsMilestones,
-            'colleges':qsColleges,
-            'departments':qsDepartments,
-            'skill_categories':qsSkillCategory,
-            'default_skill_set': qsDefaultSkillSet,
-            'milestone_types':qsMilestoneTypes
-        }
-        return render(request,'viewStudent.html',context)
+        if request.user.user_type == 'Administrator':
+            student=Student.objects.get(user_id=id)
+            qsSkills=Student_Possess_Skill.objects.filter(student_id=student)
+            qsMilestones=Milestone.objects.filter(owner_student_id=student)
+            qsColleges=College.objects.all()
+            qsDepartments=Department.objects.filter(college_id=student.department_id.college_id)
+            qsSkillCategory=Skill_Category.objects.all()
+            category_id=qsSkillCategory[0].id if qsSkillCategory else 0
+            qsDefaultSkillSet=Skill.objects.filter(category_id=category_id)
+            qsMilestoneTypes=Milestone_Type.objects.all()
+            context={
+                'student':student,
+                'skills':qsSkills,
+                'milestones':qsMilestones,
+                'colleges':qsColleges,
+                'departments':qsDepartments,
+                'skill_categories':qsSkillCategory,
+                'default_skill_set': qsDefaultSkillSet,
+                'milestone_types':qsMilestoneTypes
+            }
+            return render(request,'viewStudent.html',context)
+        else:
+            return redirect('Creator:unauthorized_view')
     elif request.method=="POST":
         if 'btnUpdateStudent' in request.POST:
             idStud=request.POST.get('student_id')
@@ -403,13 +478,16 @@ def viewStudentDetails(request,id):
 
 class StudentPostView(View):
     def get(self,request):
-        qsPostType=Student_Post_Type.objects.all()
-        qsPost=Student_Post.objects.all()
-        context={
-            'post_types':qsPostType,
-            'posts':qsPost
-        }
-        return render(request,'student_posts.html',context)
+        if request.user.user_type == 'Administrator':
+            qsPostType=Student_Post_Type.objects.all()
+            qsPost=Student_Post.objects.all()
+            context={
+                'post_types':qsPostType,
+                'posts':qsPost
+            }
+            return render(request,'student_posts.html',context)
+        else:
+            return redirect('Creator:unauthorized_view')
     def post(self,request):
         if request.method=='POST':
             if 'btnDelete' in request.POST:
@@ -419,13 +497,16 @@ class StudentPostView(View):
 
 class JobCompanyView(View):
     def get(self,request):
-        qsJob=Job.objects.all()
-        qsCompany=Company.objects.all()
-        context={
-            'jobs':qsJob,
-            'companies':qsCompany
-        }
-        return render(request,'job-companies.html',context)
+        if request.user.user_type == 'Administrator':
+            qsJob=Job.objects.all()
+            qsCompany=Company.objects.all()
+            context={
+                'jobs':qsJob,
+                'companies':qsCompany
+            }
+            return render(request,'job-companies.html',context)
+        else:
+            return redirect('Creator:unauthorized_view')
     def post(self,request):
         if request.method=='POST':
             if 'btnAddJob' in request.POST:
@@ -498,14 +579,19 @@ class JobCompanyView(View):
 
 class ActivitiesView(View):
     def get(self,request):
-        # TODO user_sessioning
-        qsActivities=getActivityHeirarchy(Community.objects.get(user_id='aaa-83502').getCreatedCommunities())
-        qsActivityStatus=Activity_Status.objects.all()
-        context={
-            'activities':qsActivities,
-            'activity_status':qsActivityStatus
-        }
-        return render(request,'activities.html',context)
+        if request.user.user_type == 'Community':
+            if Community.objects.get(user_id=request.user.user_id).isAdmin:
+                qsActivities=getActivityHeirarchy(Community.objects.get(user_id=request.user.user_id).getCreatedCommunities())
+                qsActivityStatus=Activity_Status.objects.all()
+                context={
+                    'activities':qsActivities,
+                    'activity_status':qsActivityStatus
+                }
+                return render(request,'activities.html',context)
+            else:
+                return redirect('Creator:unauthorized_view')
+        else:
+            return redirect('Creator:unauthorized_view')
     def post(self,request):
         if 'btnViewActivity' in request.POST:
             return redirect('Creator:activity_detail_view',request.POST.get('activity_id'))
@@ -514,41 +600,43 @@ def getActivityHeirarchy(queryset):
         combinedQuerySet=Activity.objects.none()
         for com in queryset:
             combinedQuerySet=combinedQuerySet.union(com.getCreatedActivities(),all=True)
-            print(combinedQuerySet)
             combinedQuerySet=combinedQuerySet.union(getActivityHeirarchy(com.getCreatedCommunities()),all=True)
         return combinedQuerySet
 
 def viewActivityDetails(request,id):
     if request.method=="GET":
-        activity=Activity.objects.get(id=id)
-        if activity.activity_type == 'Announcement':
-            context={
-                'activity':activity
-            }
-            return render(request,'viewAnnouncement.html',context)
-        elif activity.activity_type == 'Event':
-            event = Event.objects.get(id=id)
-            context={
-                'event':event
-            }
-            return render(request,'viewEvent.html',context)
+        if request.user.user_type == 'Community':
+            if Community.objects.get(user_id=request.user.user_id).isAdmin:
+                activity=Activity.objects.get(id=id)
+                if activity.activity_type == 'Announcement':
+                    context={
+                        'activity':activity
+                    }
+                    return render(request,'viewAnnouncement.html',context)
+                elif activity.activity_type == 'Event':
+                    event = Event.objects.get(id=id)
+                    context={
+                        'event':event
+                    }
+                    return render(request,'viewEvent.html',context)
+                else:
+                    context={
+                        'task':activity
+                    }
+                    return render(request,'viewTask.html',context)
+            else:
+                return redirect('Creator:unauthorized_view')
         else:
-            context={
-                'task':activity
-            }
-            return render(request,'viewTask.html',context)
+            return redirect('Creator:unauthorized_view')
     elif request.method=="POST":
         if 'btnApprove' in request.POST:
             activity_id= request.POST.get("activity_id")
             activity=Activity.objects.get(id=activity_id)
-            #change status id change status admin
-            # TODO user sessioning
             approvedStatus=Activity_Status.objects.get(name='Approved')
-            thisAdmin=Community.objects.get(user_id='aaa-83502')
+            thisAdmin=Community.objects.get(user_id=request.user.user_id)
             Activity.objects.filter(id=activity_id).update(
                 status_id=approvedStatus, status_admin_id=thisAdmin
             )
-            # put student targets in table
             targetDepartments=activity.getTargetDepartments()
             for department in targetDepartments:
                 studentsInDepartment=getStudentMembersOfADepartment(department.id)
@@ -561,7 +649,7 @@ def viewActivityDetails(request,id):
             activity_Id= request.POST.get("activity_id")
             rejection_message=request.POST.get('reject-activity-message')
             rejectedStatus=Activity_Status.objects.get(name='Rejected')
-            thisAdmin=Community.objects.get(user_id='aaa-83502')
+            thisAdmin=Community.objects.get(user_id=request.user.user_id)
             Activity.objects.filter(id=activity_id).update(
                 status_id=rejectedStatus,status_admin_id=thisAdmin,rejection_message=rejection_message
             )

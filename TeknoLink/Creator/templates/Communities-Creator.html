@@ -23,57 +23,67 @@
 </head>
 <body>
 <div class="wrapper d-flex align-items-stretch ">
-    <nav id="sidebar" class="" style="height: 100vh;">
-        <div class="custom-menu ">
-            <button type="button" id="sidebarCollapse" class="btn btn-primary ">
-                <i class="fa fa-bars " style="color: white;"></i>
-                <span class="sr-only ">Toggle Menu</span>
-            </button>
-        </div>
-        <div class="p-4 ">
-            <div class="d-flex flex-row align-items-stretch ">
-                <img src="{%static 'assets/img/navlogo.png'%}" alt=" " height="40 " width="40 " style="margin-right: 20px; ">
-                <div>
-                    <h5><b> TeknoLink Administrator</b></h5>
-                </div>
+        <nav id="sidebar" class="" style="height: 100vh;">
+            <div class="custom-menu ">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary ">
+	          <i class="fa fa-bars " style="color:white;"></i>
+	          <span class="sr-only ">Toggle Menu</span>
+	        </button>
             </div>
-            <hr>
-            <br>
-            <ul class="list-unstyled components mb-5 ">
-                <li>
-                    <a href="{% url 'Creator:students_view' %}"><span  class="fa fa-graduation-cap mr-3 "></span> Student</a>
-                </li>
-                <li>
-                    <a href="{% url 'Creator:student_posts_view' %}"><span  class="fa fa-clipboard mr-3 "></span> Student Post</a>
-                </li>
-                <li class="active">
-                    <a href="{% url 'Creator:communities_view' %} "><span class="fa fa-sitemap mr-3 " id="yellow"></span> Community</a>
-                </li>
-                <li>
-                    <a href="{% url 'Creator:skill_skill_category_view' %}"><span class="fa fa-level-up mr-3 "></span> Skill/Category</a>
-                </li>
-                <li>
-                    <a href="{% url 'Creator:departments_colleges_view' %} "><span class="fa fa-university mr-3 "></span> College/Department</a>
-                </li>
-                <li>
-                    <a href="{% url 'Creator:jobs_companies_view' %}"><span class="fa fa-briefcase mr-3 "></span> Job/Company</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <div class=" " style="width:100%; ">
-        <div class="topbaR">
+            <div class="p-4 ">
+                <div class="d-flex flex-row align-items-stretch ">
+                    <img src="image/navlogo.png " alt=" " height="40 " width="40 " style="margin-right: 20px; ">
+                    <div>
+                        <h5><a href="index.html " class="logo "><b> TeknoLink</b></a> </h5>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="d-flex flex-column ">
+                    <a href="#">
+                        <img src="image/Guidance.jpg " alt=" " height="100px " width="100% ">
+                    </a>
+                </div>
+                <div class="d-flex flex-column ">
+                    <button class="btn btn-warning btn-sm " style="border-radius: 10px; "><b style="color: rgb(138, 0, 0); ">Create</b></button>
+                </div>
+                <br>
+
+                <ul class="list-unstyled components mb-5 ">
+                    <li>
+                        <a href="# "><span  class="fa fa-home mr-3 "></span> Dashboard</a>
+                    </li>
+                    <li class="active ">
+                        <a href="#"><span  id="yellow" class="fa fa-pencil mr-3 "></span> Create</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-briefcase mr-3 "></span> Events</a>
+                    </li>
+                    <li>
+                        <a href="# "><span class="fa fa-sticky-note mr-3 "></span> Tasks</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-paper-plane mr-3 "></span> Announcements</a>
+                    </li>
+                    <li>
+                        <a href="# "><span class="fa fa-cog mr-3 "></span> Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class=" " style="width:100%; ">
+            <div class="topbaR ">
             <div class="d-inline-block">
                 <span>Hello, {{request.user}}</span>
             </div>
-            <div class="d-inline-block">
-                <i class="fa fa-bell-o fa-lg " aria-hidden="true "></i>
-            </div>
+                <div>
+                    <i class="fa fa-bell-o fa-lg " aria-hidden="true "></i>
+                </div>
             <div class="d-inline-block">
                 <a href="{% url 'Creator:logout' %}"><span class="fa fa-sign-out mr-3 fa-lg"></span></a>
             </div>
-        </div>
-        <div style="overflow-y: scroll; height: 100vh;">
+            </div>
+            <div style="overflow-y: scroll; height: 100vh;">
             <div class="container container-communities mb-5">
                 <div class="row">
                     <div class="col-sm-12 col-md-3 p-0">

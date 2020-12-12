@@ -65,8 +65,14 @@
     </nav>
     <div class=" " style="width:100%;">
         <div class="topbaR">
+        <div class="d-inline-block">
+                <span>Hello, {{request.user}}</span>
+            </div>
             <div>
                 <i class="fa fa-bell-o fa-lg " aria-hidden="true "></i>
+            </div>
+                        <div class="d-inline-block">
+                <a href="{% url 'Creator:logout' %}"><span class="fa fa-sign-out mr-3 fa-lg"></span></a>
             </div>
         </div>
         <div class="parent-container" style="overflow-x: scroll; overflow-y: scroll; height: 100vh;">
@@ -162,9 +168,14 @@
                         <div class="col-sm-12 col-md-6">
                             <p class="labels">Name</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
-                                <input type="text" class="form-input form-input-view-student" value="{{college.name}}" name="college_name">
+                                <input id="college_initial_name" value="{{college.name}}" hidden>
+                                <input type="text" class="form-input form-input-view-student college-name-input" value="{{college.name}}" name="college_name">
                             </div>
                         </div>
+                        <div class="col-sm-4 col-md-6 d-flex align-items-center name-response-create-community">
+                                    <p class="invalid-username d-none">Sorry, Name is already taken</p>
+                                    <p class="valid-username d-none">Great! Name is available</p>
+                                </div>
                         <div class="col-sm-12 mt-3">
                             <p class="labels">Description</p>
                             <div class="form-item inputWrapper">
@@ -178,7 +189,7 @@
                                 <input class="form-input" type="text" value="{{college.location}}" name="college_location">
                             </div>
                         </div>
-                        <div class="col-12 mt-3">
+                        <div class="col-12 mt-3 update-button-create-community">
                             <button class="pageBtn labels float-right" type="submit" name="btnUpdateCollege">Update</button>
                         </div>
                     </form>
@@ -206,9 +217,13 @@
                         <div class="col-sm-12 col-md-6">
                             <p class="labels">Name</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
-                                <input type="text" class="form-input form-input-view-student" name="college_name">
+                                <input type="text" class="form-input form-input-view-student college-name-input" name="college_name">
                             </div>
                         </div>
+                        <div class="col-sm-4 col-md-6 d-flex align-items-center name-response-create-community">
+                                    <p class="invalid-username d-none">Sorry, Name is already taken</p>
+                                    <p class="valid-username d-none">Great! Name is available</p>
+                                </div>
                         <div class="col-sm-12 mt-3">
                             <p class="labels">Description</p>
                             <div class="form-item inputWrapper">
@@ -222,7 +237,7 @@
                                 <input class="form-input" type="text" value="" name="college_location">
                             </div>
                         </div>
-                        <div class="col-12 mt-3">
+                        <div class="col-12 mt-3 update-button-create-community">
                             <button class="pageBtn labels float-right" type="submit" name="btnCreateCollege">Add</button>
                         </div>
                     </form>
@@ -333,9 +348,14 @@
                         <div class="col-sm-12 col-md-6 mt-3">
                             <p class="labels">Department Name</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
-                                <input class="form-input form-input-view-student" type="text" name="department_name" value="{{department.name}}">
+                            <input id="department_initial_name" value="{{department.name}}" hidden>
+                                <input class="form-input form-input-view-student department-name-input" type="text" name="department_name" value="{{department.name}}">
                             </div>
                         </div>
+                        <div class="col-sm-4 col-md-6 d-flex align-items-center name-response-create-community">
+                                    <p class="invalid-username d-none">Sorry, Name is already taken</p>
+                                    <p class="valid-username d-none">Great! Name is available</p>
+                                </div>
                         <div class="col-sm-12 col-md-6 mt-3">
                             <p class="labels">College</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
@@ -352,7 +372,7 @@
                                 <textarea class="form-input" name="department_description" rows="6">{{department.description}}</textarea>
                             </div>
                         </div>
-                        <div class="col-12 mt-3">
+                        <div class="col-12 mt-3 update-button-create-community">
                             <button class="pageBtn labels float-right" type="submit" name="btnUpdateDepartment">Update</button>
                         </div>
                     </form>
@@ -380,9 +400,13 @@
                         <div class="col-sm-12 col-md-6 mt-3">
                             <p class="labels">Department Name</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
-                                <input class="form-input form-input-view-student" type="text" value="" name="department_name">
+                                <input class="form-input form-input-view-student department-name-input" type="text" value="" name="department_name">
                             </div>
                         </div>
+                        <div class="col-sm-4 col-md-6 d-flex align-items-center name-response-create-community">
+                                    <p class="invalid-username d-none">Sorry, Name is already taken</p>
+                                    <p class="valid-username d-none">Great! Name is available</p>
+                                </div>
                         <div class="col-sm-12 col-md-6 mt-3">
                             <p class="labels">College</p>
                             <div class="form-item d-flex align-content-center inputWrapper">
@@ -399,7 +423,7 @@
                                 <textarea class="form-input" name="department_description" rows="6"></textarea>
                             </div>
                         </div>
-                        <div class="col-12 mt-3">
+                        <div class="col-12 mt-3 update-button-create-community">
                             <button class="pageBtn labels float-right" type="submit" name="btnCreateDepartment">Add</button>
                         </div>
                     </form>

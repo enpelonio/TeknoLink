@@ -1,11 +1,20 @@
 from django.db import models
 from django.utils.timezone import now as date_now
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
 
+from .managers import CustomUserManager
 
-class User(models.Model):
+class User(AbstractBaseUser,PermissionsMixin):
     user_id=models.CharField(max_length=50,primary_key=True,default=date_now)
     password=models.CharField(max_length=25)
     user_type=models.CharField(max_length=25,default='Student')
+    date_created=models.DateField(default=date_now)
+
+    USERNAME_FIELD = 'user_id'
+    REQUIRED_FIELDS = [user_id,password,user_type]
+
+    objects = CustomUserManager()
 
     def getContactNumbers(self):
         contact_numbers=User_Contact_Number.objects.filter(user=self.user_id) 
@@ -13,6 +22,9 @@ class User(models.Model):
             return contact_numbers
         else:
             return None
+    
+    def __str__(self):
+        return self.user_id
     
     class Meta:
         db_table='User'
@@ -25,7 +37,6 @@ class User_Contact_Number(models.Model):
 
 
 class Community(User):
-    date_created=models.DateField(default=date_now)
     name=models.CharField(max_length=50)
     create_admin_id=models.ForeignKey('self',null=True,blank=True,on_delete=models.CASCADE,related_name='create_admin_id_set')
     isAdmin=models.BooleanField()
@@ -64,7 +75,6 @@ class Department(models.Model):
         db_table='Department'
 
 class Student(User):
-    date_created=models.DateField(default=date_now)
     student_id_editable=models.CharField(max_length=50,default=date_now)
     first_name=models.CharField(max_length=50)
     alias=models.CharField(max_length=50,null=True,blank=True)

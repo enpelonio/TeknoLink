@@ -66,8 +66,14 @@
     </nav>
     <div class=" " style="width:100%; ">
         <div class="topbaR">
+        <div class="d-inline-block">
+                <span>Hello, {{request.user}}</span>
+            </div>
             <div>
                 <i class="fa fa-bell-o fa-lg " aria-hidden="true "></i>
+            </div>
+                        <div class="d-inline-block">
+                <a href="{% url 'Creator:logout' %}"><span class="fa fa-sign-out mr-3 fa-lg"></span></a>
             </div>
         </div>
         <div style="overflow-y: scroll; height: 100vh;">
